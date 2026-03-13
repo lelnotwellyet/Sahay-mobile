@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "301609957648",
+    "project_id": "sahay-fd679",
+    "storage_bucket": "sahay-fd679.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301609957648:android:05718508dba1596dae4d95",
+        "android_client_info": {
+          "package_name": "com.lelnotwellyet.Sahay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301609957648-mp9lfcan9r31feujekmp7935duh6ubm6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lelnotwellyet.Sahay",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "301609957648-dogt5n84oe5ia709uit72683krmsc1rv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPrT1gKnWSqWSXz5W4qmfZZauIdTpjC-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301609957648-dogt5n84oe5ia709uit72683krmsc1rv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
