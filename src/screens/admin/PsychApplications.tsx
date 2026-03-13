@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, FlatList,
+  View, Text, FlatList,
   TouchableOpacity, SafeAreaView, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/config/supabase';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import styles from '@/styles/screens/admin/PsychApplications.styles';
 
 interface Application {
   id: string;
@@ -147,57 +148,3 @@ export default function PsychApplications() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  header: {
-    flexDirection: 'row', justifyContent: 'space-between',
-    alignItems: 'center', paddingHorizontal: 24,
-    paddingTop: 20, paddingBottom: 12,
-  },
-  title: { fontSize: 24, fontWeight: '800', color: '#1A1A2E' },
-  filterRow: {
-    flexDirection: 'row', marginHorizontal: 24,
-    backgroundColor: '#E8E6FF', borderRadius: 14,
-    padding: 4, marginBottom: 16,
-  },
-  filterTab: {
-    flex: 1, paddingVertical: 10,
-    borderRadius: 10, alignItems: 'center',
-  },
-  filterTabActive: { backgroundColor: '#fff' },
-  filterTabText: { fontSize: 14, fontWeight: '600', color: '#999' },
-  filterTabTextActive: { color: '#6C63FF' },
-  list: { paddingHorizontal: 24, paddingBottom: 40 },
-  card: {
-    backgroundColor: '#fff', borderRadius: 18,
-    padding: 16, marginBottom: 12,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05, shadowRadius: 8, elevation: 2,
-  },
-  cardTop: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  avatar: {
-    width: 50, height: 50, borderRadius: 25,
-    backgroundColor: '#6C63FF', alignItems: 'center',
-    justifyContent: 'center', marginRight: 12,
-  },
-  avatarText: { fontSize: 20, fontWeight: '800', color: '#fff' },
-  cardInfo: { flex: 1 },
-  name: { fontSize: 15, fontWeight: '700', color: '#1A1A2E' },
-  spec: { fontSize: 13, color: '#6C63FF', fontWeight: '600', marginTop: 2 },
-  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 4 },
-  metaText: { fontSize: 12, color: '#999' },
-  dot: { color: '#ccc', fontSize: 12 },
-  licenseRow: {
-    flexDirection: 'row', alignItems: 'center',
-    gap: 6, paddingTop: 10,
-    borderTopWidth: 1, borderTopColor: '#f0f0f0',
-  },
-  licenseText: { fontSize: 13, color: '#999' },
-  emptyState: {
-    flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40,
-  },
-  emptyTitle: { fontSize: 18, fontWeight: '800', color: '#1A1A2E', marginTop: 16, marginBottom: 8 },
-  emptyDesc: { fontSize: 14, color: '#999', textAlign: 'center', lineHeight: 22 },
-});

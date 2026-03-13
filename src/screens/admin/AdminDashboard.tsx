@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   SafeAreaView, ScrollView, Alert, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import styles from '@/styles/screens/admin/AdminDashboard.styles';
 
 interface Stats {
   pendingApplications: number;
@@ -163,58 +164,3 @@ export default function AdminDashboard() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F4FF' },
-  header: {
-    flexDirection: 'row', justifyContent: 'space-between',
-    alignItems: 'center', paddingHorizontal: 24,
-    paddingTop: 20, paddingBottom: 16,
-  },
-  title: { fontSize: 26, fontWeight: '800', color: '#1A1A2E' },
-  subtitle: { fontSize: 14, color: '#999', marginTop: 2 },
-  alertBanner: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#FFF8E1', marginHorizontal: 24,
-    borderRadius: 14, padding: 14, gap: 10,
-    marginBottom: 8, borderWidth: 1, borderColor: '#FFE082',
-  },
-  alertDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#FF9800' },
-  alertText: { flex: 1, fontSize: 13, color: '#795548' },
-  alertBold: { fontWeight: '700', color: '#E65100' },
-  sectionTitle: {
-    fontSize: 18, fontWeight: '700', color: '#1A1A2E',
-    marginHorizontal: 24, marginTop: 20, marginBottom: 12,
-  },
-  statsGrid: {
-    flexDirection: 'row', flexWrap: 'wrap',
-    marginHorizontal: 24, gap: 12,
-  },
-  statCard: {
-    width: '47%', borderRadius: 18, padding: 16,
-    alignItems: 'center', gap: 6,
-  },
-  statNum: { fontSize: 28, fontWeight: '800', color: '#fff' },
-  statLabel: { fontSize: 12, color: '#fff', opacity: 0.9, textAlign: 'center', lineHeight: 16 },
-  actionCard: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#fff', marginHorizontal: 24,
-    borderRadius: 16, padding: 16, marginBottom: 12,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05, shadowRadius: 8, elevation: 2, gap: 12,
-  },
-  actionIcon: {
-    width: 48, height: 48, borderRadius: 12,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  actionText: { flex: 1 },
-  actionTitle: { fontSize: 15, fontWeight: '700', color: '#1A1A2E' },
-  actionSub: { fontSize: 13, color: '#999', marginTop: 2 },
-  badge: {
-    backgroundColor: '#FF9800', borderRadius: 10,
-    minWidth: 22, height: 22, alignItems: 'center',
-    justifyContent: 'center', paddingHorizontal: 6,
-  },
-  badgeText: { color: '#fff', fontSize: 12, fontWeight: '700' },
-});

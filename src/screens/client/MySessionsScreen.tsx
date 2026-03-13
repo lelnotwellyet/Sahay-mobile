@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
-  View, Text, StyleSheet, FlatList,
+  View, Text, FlatList,
   TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
+import styles from '@/styles/screens/client/MySessionsScreen.styles';
 
 type SessionStatus = 'pending' | 'active' | 'completed' | 'cancelled';
 
@@ -199,65 +200,3 @@ export default function MySessionsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 24, paddingTop: 16, paddingBottom: 12,
-  },
-  title: { fontSize: 20, fontWeight: '800', color: '#1A1A2E' },
-
-  filterRow: {
-    flexDirection: 'row', paddingHorizontal: 24, gap: 8, marginBottom: 16,
-  },
-  filterBtn: {
-    paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20,
-    backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#eee',
-  },
-  filterBtnActive: { backgroundColor: '#6C63FF', borderColor: '#6C63FF' },
-  filterText: { fontSize: 13, fontWeight: '600', color: '#999' },
-  filterTextActive: { color: '#fff' },
-
-  list: { paddingHorizontal: 24, paddingBottom: 40 },
-  card: {
-    backgroundColor: '#fff', borderRadius: 20, padding: 16,
-    marginBottom: 14,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 3,
-  },
-  cardTop: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
-  psychAvatar: {
-    width: 46, height: 46, borderRadius: 23,
-    backgroundColor: '#6C63FF', alignItems: 'center', justifyContent: 'center',
-  },
-  psychAvatarText: { fontSize: 18, fontWeight: '800', color: '#fff' },
-  psychName: { fontSize: 15, fontWeight: '700', color: '#1A1A2E' },
-  specialization: { fontSize: 12, color: '#6C63FF', fontWeight: '600', marginTop: 2 },
-  statusBadge: {
-    flexDirection: 'row', alignItems: 'center', gap: 4,
-    paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8,
-  },
-  statusText: { fontSize: 11, fontWeight: '700' },
-
-  detailsRow: { flexDirection: 'row', gap: 16, flexWrap: 'wrap' },
-  detailItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  detailText: { fontSize: 12, color: '#999' },
-
-  rejoinBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: '#6C63FF', borderRadius: 12,
-    paddingVertical: 10, marginTop: 12, gap: 6,
-  },
-  rejoinBtnText: { color: '#fff', fontWeight: '700', fontSize: 14 },
-
-  emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 },
-  emptyTitle: { fontSize: 20, fontWeight: '800', color: '#1A1A2E', marginTop: 16, marginBottom: 8 },
-  emptyDesc: { fontSize: 14, color: '#999', textAlign: 'center', lineHeight: 22, marginBottom: 24 },
-  findBtn: {
-    backgroundColor: '#6C63FF', paddingHorizontal: 28,
-    paddingVertical: 14, borderRadius: 16,
-  },
-  findBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
-});

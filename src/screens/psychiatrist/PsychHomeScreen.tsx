@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   SafeAreaView, ScrollView, Switch, Alert, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Psychiatrist } from '@/types';
+import styles from '@/styles/screens/psychiatrist/PsychHomeScreen.styles';
 
 export default function PsychHomeScreen() {
   const { user, logout } = useAuth();
@@ -206,69 +207,3 @@ export default function PsychHomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F4FF' },
-  header: {
-    flexDirection: 'row', justifyContent: 'space-between',
-    alignItems: 'center', paddingHorizontal: 24,
-    paddingTop: 20, paddingBottom: 16,
-  },
-  greeting: { fontSize: 24, fontWeight: '800', color: '#1A1A2E' },
-  sub: { fontSize: 14, color: '#6C63FF', marginTop: 4, fontWeight: '600' },
-  pendingBanner: {
-    flexDirection: 'row', alignItems: 'flex-start',
-    backgroundColor: '#FFF8E1', marginHorizontal: 24,
-    borderRadius: 16, padding: 16, gap: 12,
-    marginBottom: 16, borderWidth: 1, borderColor: '#FFE082',
-  },
-  pendingTitle: { fontSize: 14, fontWeight: '700', color: '#E65100', marginBottom: 4 },
-  pendingDesc: { fontSize: 13, color: '#795548', lineHeight: 18 },
-  toggleCard: {
-    flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'space-between', backgroundColor: '#fff',
-    marginHorizontal: 24, borderRadius: 20, padding: 20,
-    marginBottom: 20, shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06,
-    shadowRadius: 8, elevation: 3,
-  },
-  toggleLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
-  statusDot: { width: 12, height: 12, borderRadius: 6 },
-  toggleLabel: { fontSize: 15, fontWeight: '700', color: '#1A1A2E' },
-  toggleSub: { fontSize: 12, color: '#999', marginTop: 2 },
-  statsRow: {
-    flexDirection: 'row', marginHorizontal: 24,
-    gap: 10, marginBottom: 24,
-  },
-  statCard: {
-    flex: 1, borderRadius: 16, padding: 14,
-    alignItems: 'center', gap: 4,
-  },
-  statNum: { fontSize: 22, fontWeight: '800', color: '#fff' },
-  statLabel: { fontSize: 11, color: '#fff', opacity: 0.9, textAlign: 'center' },
-  sectionTitle: {
-    fontSize: 18, fontWeight: '700', color: '#1A1A2E',
-    marginHorizontal: 24, marginBottom: 12,
-  },
-  actionCard: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#fff', marginHorizontal: 24,
-    borderRadius: 16, padding: 16, marginBottom: 12,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05, shadowRadius: 8, elevation: 2, gap: 12,
-  },
-  actionIcon: {
-    width: 48, height: 48, borderRadius: 12,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  actionText: { flex: 1 },
-  actionTitle: { fontSize: 15, fontWeight: '700', color: '#1A1A2E' },
-  actionSub: { fontSize: 13, color: '#999', marginTop: 2 },
-  badge: {
-    backgroundColor: '#FF4444', borderRadius: 10,
-    minWidth: 20, height: 20, alignItems: 'center',
-    justifyContent: 'center', paddingHorizontal: 6,
-  },
-  badgeText: { color: '#fff', fontSize: 11, fontWeight: '700' },
-});

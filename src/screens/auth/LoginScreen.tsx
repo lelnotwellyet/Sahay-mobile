@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   SafeAreaView, TextInput, Alert, ActivityIndicator,
   KeyboardAvoidingView, Platform
 } from 'react-native';
@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '@/navigation/AuthNavigator';
 import { useAuth } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import styles from '@/styles/screens/auth/LoginScreen.styles';
 
 type Nav = StackNavigationProp<AuthStackParamList, 'Login'>;
 
@@ -97,42 +98,3 @@ export default function LoginScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  inner: { flex: 1, paddingHorizontal: 30, paddingTop: 20 },
-  back: { marginBottom: 30 },
-  title: { fontSize: 32, fontWeight: '800', color: '#1A1A2E' },
-  subtitle: { fontSize: 16, color: '#666', marginTop: 8, marginBottom: 40 },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  inputIcon: { marginRight: 12 },
-  input: { flex: 1, fontSize: 16, color: '#1A1A2E' },
-  loginBtn: {
-    backgroundColor: '#6C63FF',
-    paddingVertical: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    marginTop: 8,
-    shadowColor: '#6C63FF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  loginText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  registerLink: { textAlign: 'center', color: '#999', fontSize: 14, marginTop: 20 },
-  registerLinkBold: { color: '#6C63FF', fontWeight: '700' },
-});

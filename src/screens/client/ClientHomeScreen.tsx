@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   SafeAreaView, ScrollView, Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
+import styles from '@/styles/screens/client/ClientHomeScreen.styles';
 
 const MOODS = [
   { emoji: '😊', label: 'Great', color: '#4CAF50' },
@@ -153,115 +154,3 @@ export default function ClientHomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 16,
-  },
-  greeting: { fontSize: 24, fontWeight: '800', color: '#1A1A2E' },
-  subGreeting: { fontSize: 14, color: '#666', marginTop: 4 },
-  anonBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EEF0FF',
-    marginHorizontal: 24,
-    padding: 12,
-    borderRadius: 12,
-    gap: 8,
-    marginBottom: 16,
-  },
-  anonText: { fontSize: 13, color: '#666', flex: 1 },
-  anonAlias: { color: '#6C63FF', fontWeight: '700' },
-  card: {
-    backgroundColor: '#fff',
-    marginHorizontal: 24,
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  cardTitle: { fontSize: 16, fontWeight: '700', color: '#1A1A2E', marginBottom: 16 },
-  moodRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  moodBtn: {
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    flex: 1,
-    marginHorizontal: 2,
-  },
-  moodEmoji: { fontSize: 24 },
-  moodLabel: { fontSize: 11, color: '#666', marginTop: 4, fontWeight: '600' },
-  statsRow: {
-    flexDirection: 'row',
-    marginHorizontal: 24,
-    gap: 12,
-    marginBottom: 24,
-  },
-  statCard: {
-    flex: 1,
-    borderRadius: 16,
-    padding: 16,
-    alignItems: 'center',
-    gap: 4,
-  },
-  statNumber: { fontSize: 24, fontWeight: '800', color: '#fff' },
-  statLabel: { fontSize: 12, color: '#fff', opacity: 0.9 },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1A1A2E',
-    marginHorizontal: 24,
-    marginBottom: 12,
-  },
-  actionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    marginHorizontal: 24,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-    gap: 12,
-  },
-  actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  actionText: { flex: 1 },
-  actionTitle: { fontSize: 15, fontWeight: '700', color: '#1A1A2E' },
-  actionSubtitle: { fontSize: 13, color: '#999', marginTop: 2 },
-  crisisCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFF3F3',
-    marginHorizontal: 24,
-    borderRadius: 12,
-    padding: 14,
-    gap: 8,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: '#FFCDD2',
-  },
-  crisisText: { fontSize: 13, color: '#666', flex: 1 },
-  crisisNumber: { color: '#F44336', fontWeight: '700' },
-});

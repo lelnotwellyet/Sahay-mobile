@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   FlatList, TextInput, ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/config/supabase';
 import { Psychiatrist } from '@/types';
+import styles from '@/styles/screens/client/FindPsychScreen.styles';
 
 export default function FindPsychScreen() {
   const navigation = useNavigation<any>();
@@ -160,110 +161,3 @@ export default function FindPsychScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  header: { paddingHorizontal: 24, paddingTop: 20, paddingBottom: 8 },
-  title: { fontSize: 28, fontWeight: '800', color: '#1A1A2E' },
-  subtitle: { fontSize: 14, color: '#666', marginTop: 4 },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    marginHorizontal: 24,
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginTop: 12,
-    gap: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  searchInput: { flex: 1, fontSize: 15, color: '#1A1A2E' },
-  filterRow: {
-    flexDirection: 'row',
-    marginHorizontal: 24,
-    marginTop: 12,
-    marginBottom: 8,
-    gap: 8,
-  },
-  filterBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    gap: 6,
-    borderWidth: 1,
-    borderColor: '#eee',
-  },
-  filterBtnActive: { backgroundColor: '#6C63FF', borderColor: '#6C63FF' },
-  filterText: { fontSize: 13, color: '#666', fontWeight: '600' },
-  filterTextActive: { color: '#fff' },
-  onlineDotSmall: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#4CAF50' },
-  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
-  loadingText: { color: '#666', fontSize: 14 },
-  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
-  emptyTitle: { fontSize: 18, fontWeight: '700', color: '#1A1A2E' },
-  emptySubtitle: { fontSize: 14, color: '#999', textAlign: 'center', paddingHorizontal: 40 },
-  list: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 24 },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#6C63FF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  avatarText: { fontSize: 22, fontWeight: '800', color: '#fff' },
-  onlineDot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    borderWidth: 2,
-    borderColor: '#fff',
-  },
-  cardInfo: { flex: 1 },
-  name: { fontSize: 16, fontWeight: '700', color: '#1A1A2E' },
-  specialization: { fontSize: 13, color: '#6C63FF', marginTop: 2, fontWeight: '600' },
-  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 4 },
-  metaText: { fontSize: 12, color: '#999' },
-  statusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
-  },
-  statusText: { fontSize: 12, fontWeight: '700' },
-  bio: { fontSize: 13, color: '#666', lineHeight: 20, marginBottom: 12 },
-  requestBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#6C63FF',
-    borderRadius: 12,
-    paddingVertical: 12,
-    gap: 8,
-  },
-  requestBtnDisabled: { backgroundColor: '#F5F5F5' },
-  requestBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
-});

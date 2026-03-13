@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   SafeAreaView, Alert, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import { sendSessionRequestNotification } from '@/utils/notifications';
+import styles from '@/styles/screens/client/SessionRequestScreen.styles';
 
 type SessionType = 'chat' | 'video';
 
@@ -249,105 +250,3 @@ export default function SessionRequestScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  back: { paddingHorizontal: 24, paddingTop: 16, paddingBottom: 8 },
-  inner: { paddingHorizontal: 24, paddingBottom: 40 },
-
-  // Psychiatrist card
-  psychCard: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#fff', borderRadius: 20,
-    padding: 16, marginBottom: 28,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 3, gap: 14,
-  },
-  psychAvatar: {
-    width: 60, height: 60, borderRadius: 30,
-    backgroundColor: '#6C63FF', alignItems: 'center', justifyContent: 'center',
-  },
-  psychAvatarText: { fontSize: 24, fontWeight: '800', color: '#fff' },
-  onlineDot: {
-    width: 14, height: 14, borderRadius: 7,
-    position: 'absolute', bottom: 0, right: 0,
-    borderWidth: 2, borderColor: '#fff',
-  },
-  psychName: { fontSize: 17, fontWeight: '800', color: '#1A1A2E' },
-  psychSpec: { fontSize: 13, color: '#6C63FF', fontWeight: '600', marginTop: 2 },
-  psychMeta: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 4 },
-  psychMetaText: { fontSize: 12, color: '#999' },
-
-  // Session type
-  sectionLabel: { fontSize: 16, fontWeight: '700', color: '#1A1A2E', marginBottom: 12 },
-  typeCard: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#fff', borderRadius: 18,
-    padding: 16, marginBottom: 12, gap: 14,
-    borderWidth: 2, borderColor: 'transparent',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05, shadowRadius: 8, elevation: 2,
-  },
-  typeCardActive: { borderColor: '#6C63FF', backgroundColor: '#FAFAFE' },
-  typeIconBox: {
-    width: 48, height: 48, borderRadius: 14,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  typeTitle: { fontSize: 15, fontWeight: '700', color: '#1A1A2E', marginBottom: 3 },
-  typeTitleActive: { color: '#6C63FF' },
-  typeDesc: { fontSize: 13, color: '#999', lineHeight: 18 },
-  radioOuter: {
-    width: 22, height: 22, borderRadius: 11,
-    borderWidth: 2, borderColor: '#ddd',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  radioOuterActive: { borderColor: '#6C63FF' },
-  radioInner: { width: 12, height: 12, borderRadius: 6, backgroundColor: '#6C63FF' },
-
-  // Info + send
-  infoBox: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#EEF0FF', borderRadius: 12,
-    padding: 12, gap: 8, marginTop: 4, marginBottom: 24,
-  },
-  infoText: { flex: 1, fontSize: 13, color: '#6C63FF', lineHeight: 18 },
-  sendBtn: {
-    flexDirection: 'row', backgroundColor: '#6C63FF',
-    paddingVertical: 16, borderRadius: 16,
-    alignItems: 'center', justifyContent: 'center', gap: 10,
-    shadowColor: '#6C63FF', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3, shadowRadius: 8, elevation: 4,
-  },
-  sendBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-
-  // Waiting state
-  waitingContainer: {
-    flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40,
-  },
-  pulseCircle: {
-    width: 120, height: 120, borderRadius: 60,
-    backgroundColor: '#EEF0FF', alignItems: 'center',
-    justifyContent: 'center', marginBottom: 32,
-  },
-  pulseInner: {
-    width: 88, height: 88, borderRadius: 44,
-    backgroundColor: '#6C63FF', alignItems: 'center', justifyContent: 'center',
-  },
-  pulseInitial: { fontSize: 36, fontWeight: '800', color: '#fff' },
-  waitingTitle: { fontSize: 22, fontWeight: '800', color: '#1A1A2E', marginBottom: 10 },
-  waitingDesc: { fontSize: 14, color: '#666', textAlign: 'center', lineHeight: 22, marginBottom: 28 },
-  waitingType: { color: '#6C63FF', fontWeight: '700' },
-  waitingCard: {
-    backgroundColor: '#fff', borderRadius: 16,
-    paddingVertical: 20, paddingHorizontal: 32,
-    alignItems: 'center', marginBottom: 32,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 3,
-  },
-  waitingCardText: { color: '#999', fontSize: 14 },
-  cancelBtn: {
-    paddingVertical: 14, paddingHorizontal: 40,
-    borderRadius: 16, borderWidth: 2, borderColor: '#FF4444',
-  },
-  cancelBtnText: { color: '#FF4444', fontSize: 15, fontWeight: '700' },
-});

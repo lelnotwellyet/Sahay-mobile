@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   SafeAreaView, TextInput, Alert, ActivityIndicator,
   KeyboardAvoidingView, Platform, ScrollView
 } from 'react-native';
@@ -10,6 +10,7 @@ import { AuthStackParamList } from '@/navigation/AuthNavigator';
 import { useAuth } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 import { isValidEmail, isValidPassword } from '@/utils/validators';
+import styles from '@/styles/screens/auth/RegisterScreen.styles';
 
 type Nav = StackNavigationProp<AuthStackParamList, 'Register'>;
 type Route = RouteProp<AuthStackParamList, 'Register'>;
@@ -220,100 +221,3 @@ export default function RegisterScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  inner: { paddingHorizontal: 30, paddingTop: 20, paddingBottom: 40 },
-  back: { marginBottom: 20 },
-  roleBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EEF0FF',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    alignSelf: 'flex-start',
-    gap: 6,
-    marginBottom: 16,
-  },
-  roleText: { color: '#6C63FF', fontSize: 13, fontWeight: '600' },
-  title: { fontSize: 32, fontWeight: '800', color: '#1A1A2E' },
-  subtitle: { fontSize: 16, color: '#666', marginTop: 8, marginBottom: 32 },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginBottom: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: 'transparent',
-  },
-  inputError: { borderColor: '#FF4444', borderWidth: 1 },
-  inputIcon: { marginRight: 12 },
-  input: { flex: 1, fontSize: 16, color: '#1A1A2E' },
-  errorText: { color: '#FF4444', fontSize: 12, marginBottom: 12, marginLeft: 4 },
-  strengthContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 12,
-    marginTop: 4,
-  },
-  strengthBar: { flex: 1, height: 4, borderRadius: 2 },
-  strengthText: { fontSize: 12, color: '#666', width: 40 },
-  infoBox: {
-    flexDirection: 'row',
-    backgroundColor: '#EEF0FF',
-    borderRadius: 12,
-    padding: 14,
-    gap: 10,
-    marginBottom: 20,
-    marginTop: 8,
-    alignItems: 'flex-start',
-  },
-  infoText: { flex: 1, color: '#6C63FF', fontSize: 13, lineHeight: 20 },
-  registerBtn: {
-    backgroundColor: '#6C63FF',
-    paddingVertical: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    marginTop: 8,
-    shadowColor: '#6C63FF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  btnDisabled: { opacity: 0.7 },
-  registerText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-    gap: 12,
-  },
-  dividerLine: { flex: 1, height: 1, backgroundColor: '#ddd' },
-  dividerText: { color: '#999', fontSize: 14 },
-  googleBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    paddingVertical: 14,
-    borderRadius: 16,
-    gap: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginBottom: 8,
-  },
-  googleText: { color: '#1A1A2E', fontSize: 15, fontWeight: '600' },
-  loginLink: { textAlign: 'center', color: '#999', fontSize: 14, marginTop: 16 },
-  loginLinkBold: { color: '#6C63FF', fontWeight: '700' },
-});

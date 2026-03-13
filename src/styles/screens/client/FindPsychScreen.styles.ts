@@ -1,0 +1,55 @@
+import { StyleSheet } from 'react-native';
+import { colors, shadow } from '@/styles/theme';
+
+export default StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.background },
+  header: { paddingHorizontal: 24, paddingTop: 20, paddingBottom: 8 },
+  title: { fontSize: 28, fontWeight: '800', color: colors.dark },
+  subtitle: { fontSize: 14, color: colors.text, marginTop: 4 },
+  searchContainer: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white,
+    marginHorizontal: 24, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12,
+    marginTop: 12, gap: 10, ...shadow.soft,
+  },
+  searchInput: { flex: 1, fontSize: 15, color: colors.dark },
+  filterRow: { flexDirection: 'row', marginHorizontal: 24, marginTop: 12, marginBottom: 8, gap: 8 },
+  filterBtn: {
+    flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8,
+    borderRadius: 20, backgroundColor: colors.white, gap: 6, borderWidth: 1, borderColor: colors.border,
+  },
+  filterBtnActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  filterText: { fontSize: 13, color: colors.text, fontWeight: '600' },
+  filterTextActive: { color: colors.white },
+  onlineDotSmall: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.success },
+  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  loadingText: { color: colors.text, fontSize: 14 },
+  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.dark },
+  emptySubtitle: { fontSize: 14, color: colors.subtext, textAlign: 'center', paddingHorizontal: 40 },
+  list: { paddingHorizontal: 24, paddingTop: 8, paddingBottom: 24 },
+  card: { backgroundColor: colors.white, borderRadius: 20, padding: 16, marginBottom: 16, ...shadow.soft },
+  cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+  avatar: {
+    width: 56, height: 56, borderRadius: 28, backgroundColor: colors.primary,
+    alignItems: 'center', justifyContent: 'center', marginRight: 12,
+  },
+  avatarText: { fontSize: 22, fontWeight: '800', color: colors.white },
+  onlineDot: {
+    width: 14, height: 14, borderRadius: 7, position: 'absolute',
+    bottom: 0, right: 0, borderWidth: 2, borderColor: colors.white,
+  },
+  cardInfo: { flex: 1 },
+  name: { fontSize: 16, fontWeight: '700', color: colors.dark },
+  specialization: { fontSize: 13, color: colors.primary, marginTop: 2, fontWeight: '600' },
+  metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 4 },
+  metaText: { fontSize: 12, color: colors.subtext },
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
+  statusText: { fontSize: 12, fontWeight: '700' },
+  bio: { fontSize: 13, color: colors.text, lineHeight: 20, marginBottom: 12 },
+  requestBtn: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: colors.primary, borderRadius: 12, paddingVertical: 12, gap: 8,
+  },
+  requestBtnDisabled: { backgroundColor: '#F5F5F5' },
+  requestBtnText: { color: colors.white, fontSize: 14, fontWeight: '700' },
+});

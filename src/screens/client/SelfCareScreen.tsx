@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, TouchableOpacity,
   FlatList, Image, Modal, ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import styles from '@/styles/screens/client/SelfCareScreen.styles';
 
 type RouteParams = {
   SelfCare: { mood?: string };
@@ -200,73 +201,3 @@ export default function SelfCareScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F0F4FF' },
-  header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 24, paddingTop: 16, paddingBottom: 12,
-  },
-  title: { fontSize: 20, fontWeight: '800', color: '#1A1A2E' },
-
-  moodBanner: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    marginHorizontal: 24, borderRadius: 12,
-    paddingHorizontal: 14, paddingVertical: 10, marginBottom: 12,
-  },
-  moodDot: { width: 10, height: 10, borderRadius: 5 },
-  moodBannerText: { fontSize: 13, fontWeight: '600' },
-
-  moodFilters: { paddingLeft: 24, paddingRight: 24, paddingBottom: 16, alignItems: 'center' },
-  moodChip: {
-    marginRight: 8,
-    paddingHorizontal: 20, paddingVertical: 10,
-    borderRadius: 20, backgroundColor: '#fff',
-    borderWidth: 1.5, borderColor: '#eee',
-  },
-  moodChipText: { fontSize: 13, fontWeight: '600', color: '#666' },
-
-  list: { paddingHorizontal: 24, paddingBottom: 40 },
-  videoCard: {
-    backgroundColor: '#fff', borderRadius: 20, marginBottom: 16,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 3,
-    overflow: 'hidden',
-  },
-  thumbnailContainer: { width: '100%', height: 180, position: 'relative' },
-  thumbnail: { width: '100%', height: '100%' },
-  playOverlay: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-    alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.15)',
-  },
-  playBtn: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: 'rgba(108,99,255,0.9)',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  durationBadge: {
-    position: 'absolute', bottom: 8, right: 8,
-    backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: 6,
-    paddingHorizontal: 8, paddingVertical: 3,
-  },
-  durationText: { color: '#fff', fontSize: 12, fontWeight: '600' },
-  videoInfo: { padding: 14 },
-  categoryBadge: {
-    alignSelf: 'flex-start', paddingHorizontal: 10,
-    paddingVertical: 3, borderRadius: 8, marginBottom: 8,
-  },
-  categoryText: { fontSize: 11, fontWeight: '700' },
-  videoTitle: { fontSize: 15, fontWeight: '700', color: '#1A1A2E', marginBottom: 4, lineHeight: 21 },
-  channelName: { fontSize: 12, color: '#999' },
-
-  emptyState: { alignItems: 'center', marginTop: 60, gap: 12 },
-  emptyTitle: { fontSize: 16, color: '#999', fontWeight: '600' },
-
-  videoModalHeader: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#1A1A2E', paddingHorizontal: 16, paddingVertical: 12, gap: 12,
-  },
-  videoModalClose: { padding: 4 },
-  videoModalTitle: { flex: 1, color: '#fff', fontSize: 14, fontWeight: '700' },
-});
