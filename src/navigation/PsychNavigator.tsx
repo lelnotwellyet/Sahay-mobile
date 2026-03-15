@@ -7,9 +7,9 @@ import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import PsychHomeScreen from '@/screens/psychiatrist/PsychHomeScreen';
 import SessionQueueScreen from '@/screens/psychiatrist/SessionQueueScreen';
-import ChatScreen from '@/screens/psychiatrist/ChatScreen';
 import VideoCallScreen from '@/screens/psychiatrist/VideoCallScreen';
 import OnboardingScreen from '@/screens/psychiatrist/OnboardingScreen';
+import EditProfileScreen from '@/screens/psychiatrist/EditProfileScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -65,8 +65,8 @@ export default function PsychNavigator() {
     <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="PsychTabs" component={PsychTabs} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="VideoCall" component={VideoCallScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
     </Stack.Navigator>
   );
 }

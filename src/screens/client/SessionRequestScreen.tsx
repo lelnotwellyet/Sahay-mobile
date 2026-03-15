@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity,
-  SafeAreaView, Alert, ActivityIndicator,
+  Alert, ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import { sendSessionRequestNotification } from '@/utils/notifications';
 import styles from '@/styles/screens/client/SessionRequestScreen.styles';
-
-type SessionType = 'chat' | 'video';
 
 type RouteParams = {
   SessionRequest: {
@@ -33,11 +32,10 @@ export default function SessionRequestScreen() {
   const { user } = useAuth();
   const { psychiatrist } = route.params;
 
-  const [selectedType, setSelectedType] = useState<SessionType>('chat');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [waiting, setWaiting] = useState(false);
-  // Listen for session status changes via Supabase Realtime
+
   useEffect(() => {
     if (!sessionId || !waiting) return;
 
@@ -51,8 +49,7 @@ export default function SessionRequestScreen() {
           if (status === 'active') {
             channel.unsubscribe();
             setWaiting(false);
-            const screen = selectedType === 'video' ? 'VideoCall' : 'Chat';
-            navigation.replace(screen, { sessionId, psychName: `Dr. ${psychiatrist.full_name}` });
+            navigation.replace('VideoCall', { sessionId, psychName: `Dr. ${psychiatrist.full_name}` });
           } else if (status === 'cancelled') {
             channel.unsubscribe();
             setWaiting(false);
@@ -79,7 +76,7 @@ export default function SessionRequestScreen() {
         .insert({
           client_id: user.id,
           psychiatrist_id: psychiatrist.id,
-          type: selectedType,
+          type: 'video',
           status: 'pending',
         })
         .select()
@@ -89,9 +86,10 @@ export default function SessionRequestScreen() {
       setSessionId(data.id);
       setWaiting(true);
 
-      // Notify the psychiatrist
-      const clientName = user.isAnonymous ? (user.alias ?? 'Anonymous') : (user.displayName || user.email?.split('@')[0] || 'A client');
-      sendSessionRequestNotification(psychiatrist.user_id, clientName, selectedType, data.id);
+      const clientName = user.isAnonymous
+        ? (user.alias ?? 'Anonymous')
+        : (user.displayName || user.email?.split('@')[0] || 'A client');
+      sendSessionRequestNotification(psychiatrist.user_id, clientName, 'video', data.id);
     } catch (e: any) {
       Alert.alert('Error', e.message);
     } finally {
@@ -133,10 +131,7 @@ export default function SessionRequestScreen() {
           <Text style={styles.waitingTitle}>Waiting for Response</Text>
           <Text style={styles.waitingDesc}>
             Dr. {psychiatrist.full_name} is being notified of your{' '}
-            <Text style={styles.waitingType}>
-              {selectedType === 'video' ? 'video call' : 'chat'}
-            </Text>{' '}
-            request.
+            <Text style={styles.waitingType}>video call</Text> request.
           </Text>
 
           <View style={styles.waitingCard}>
@@ -155,7 +150,6 @@ export default function SessionRequestScreen() {
   // ── Request screen ──────────────────────────────────────────────
   return (
     <SafeAreaView style={styles.container}>
-      {/* Back */}
       <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={24} color="#1A1A2E" />
       </TouchableOpacity>
@@ -181,50 +175,19 @@ export default function SessionRequestScreen() {
           </View>
         </View>
 
-        {/* Session type selector */}
-        <Text style={styles.sectionLabel}>Choose Session Type</Text>
-
-        <TouchableOpacity
-          style={[styles.typeCard, selectedType === 'chat' && styles.typeCardActive]}
-          onPress={() => setSelectedType('chat')}
-        >
-          <View style={[styles.typeIconBox, { backgroundColor: selectedType === 'chat' ? '#6C63FF' : '#EEF0FF' }]}>
-            <Ionicons name="chatbubbles" size={24} color={selectedType === 'chat' ? '#fff' : '#6C63FF'} />
+        {/* Video only info */}
+        <View style={[styles.typeCard, styles.typeCardActive]}>
+          <View style={[styles.typeIconBox, { backgroundColor: '#6C63FF' }]}>
+            <Ionicons name="videocam" size={24} color="#fff" />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={[styles.typeTitle, selectedType === 'chat' && styles.typeTitleActive]}>
-              Text Chat
-            </Text>
+            <Text style={[styles.typeTitle, styles.typeTitleActive]}>Video Call</Text>
             <Text style={styles.typeDesc}>
-              Message in real-time. Comfortable and discreet.
+              Face-to-face session with a licensed psychiatrist.
             </Text>
           </View>
-          <View style={[styles.radioOuter, selectedType === 'chat' && styles.radioOuterActive]}>
-            {selectedType === 'chat' && <View style={styles.radioInner} />}
-          </View>
-        </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
-          style={[styles.typeCard, selectedType === 'video' && styles.typeCardActive]}
-          onPress={() => setSelectedType('video')}
-        >
-          <View style={[styles.typeIconBox, { backgroundColor: selectedType === 'video' ? '#6C63FF' : '#EEF0FF' }]}>
-            <Ionicons name="videocam" size={24} color={selectedType === 'video' ? '#fff' : '#6C63FF'} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={[styles.typeTitle, selectedType === 'video' && styles.typeTitleActive]}>
-              Video Call
-            </Text>
-            <Text style={styles.typeDesc}>
-              Face-to-face session for a more personal connection.
-            </Text>
-          </View>
-          <View style={[styles.radioOuter, selectedType === 'video' && styles.radioOuterActive]}>
-            {selectedType === 'video' && <View style={styles.radioInner} />}
-          </View>
-        </TouchableOpacity>
-
-        {/* Confidentiality note */}
         <View style={styles.infoBox}>
           <Ionicons name="shield-checkmark-outline" size={18} color="#6C63FF" />
           <Text style={styles.infoText}>
@@ -232,7 +195,6 @@ export default function SessionRequestScreen() {
           </Text>
         </View>
 
-        {/* Send button */}
         <TouchableOpacity
           style={[styles.sendBtn, loading && { opacity: 0.7 }]}
           onPress={sendRequest}
@@ -241,8 +203,8 @@ export default function SessionRequestScreen() {
           {loading
             ? <ActivityIndicator color="#fff" />
             : <>
-                <Ionicons name={selectedType === 'video' ? 'videocam' : 'chatbubbles'} size={20} color="#fff" />
-                <Text style={styles.sendBtnText}>Send Request</Text>
+                <Ionicons name="videocam" size={20} color="#fff" />
+                <Text style={styles.sendBtnText}>Request Video Call</Text>
               </>
           }
         </TouchableOpacity>

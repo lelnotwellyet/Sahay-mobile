@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,17 +8,18 @@ import { supabase } from '@/config/supabase';
 import styles from '@/styles/screens/client/VideoCallScreen.styles';
 
 type RouteParams = {
-  VideoCall: { sessionId: string; psychName: string };
+  VideoCall: { sessionId: string; psychName: string; psychiatristId?: string };
 };
 
 export default function VideoCallScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<RouteParams, 'VideoCall'>>();
-  const { sessionId, psychName } = route.params;
+  const { sessionId, psychName, psychiatristId } = route.params;
   const [loading, setLoading] = useState(true);
+  const [showRating, setShowRating] = useState(false);
+  const [selectedRating, setSelectedRating] = useState(0);
   const webviewRef = useRef<WebView>(null);
 
-  // Use sessionId as the Jitsi room — both sides join the same room
   const roomName = `sahay-${sessionId.replace(/-/g, '').slice(0, 20)}`;
   const jitsiUrl = `https://meet.jit.si/${roomName}#config.startWithAudioMuted=false&config.startWithVideoMuted=false&interfaceConfig.SHOW_JITSI_WATERMARK=false&interfaceConfig.MOBILE_APP_PROMO=false`;
 
@@ -31,10 +32,30 @@ export default function VideoCallScreen() {
             .from('sessions')
             .update({ status: 'completed', ended_at: new Date().toISOString() })
             .eq('id', sessionId);
-          navigation.replace('ClientTabs');
+          setShowRating(true);
         },
       },
     ]);
+  };
+
+  const submitRating = async (rating: number) => {
+    if (psychiatristId && rating > 0) {
+      const { data: psych } = await supabase
+        .from('psychiatrists')
+        .select('rating, total_sessions')
+        .eq('id', psychiatristId)
+        .single();
+
+      if (psych) {
+        const newTotal = psych.total_sessions + 1;
+        const newRating = ((psych.rating * psych.total_sessions) + rating) / newTotal;
+        await supabase
+          .from('psychiatrists')
+          .update({ rating: Math.round(newRating * 10) / 10, total_sessions: newTotal })
+          .eq('id', psychiatristId);
+      }
+    }
+    navigation.replace('ClientTabs');
   };
 
   return (
@@ -59,7 +80,6 @@ export default function VideoCallScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Jitsi WebView */}
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#6C63FF" />
@@ -81,6 +101,35 @@ export default function VideoCallScreen() {
           Alert.alert('Connection Error', 'Unable to connect to video call. Check your internet connection.');
         }}
       />
+
+      {/* Rating Modal */}
+      <Modal visible={showRating} transparent animationType="fade">
+        <View style={styles.ratingOverlay}>
+          <View style={styles.ratingCard}>
+            <Text style={styles.ratingTitle}>Session Complete</Text>
+            <Text style={styles.ratingSubtitle}>How was your session with {psychName}?</Text>
+            <View style={styles.starsRow}>
+              {[1, 2, 3, 4, 5].map(star => (
+                <TouchableOpacity key={star} onPress={() => setSelectedRating(star)}>
+                  <Ionicons
+                    name={star <= selectedRating ? 'star' : 'star-outline'}
+                    size={40}
+                    color={star <= selectedRating ? '#FFC107' : '#ddd'}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            {selectedRating > 0 && (
+              <TouchableOpacity style={styles.submitRatingBtn} onPress={() => submitRating(selectedRating)}>
+                <Text style={styles.submitRatingText}>Submit Rating</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.skipBtn} onPress={() => submitRating(0)}>
+              <Text style={styles.skipText}>Skip</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

@@ -83,13 +83,27 @@ export default function OnboardingScreen() {
     }
     setLoading(true);
     try {
+      // Upload license image to Supabase Storage
+      const ext = licenseImage.split('.').pop()?.toLowerCase() ?? 'jpg';
+      const fileName = `${user?.id}-${Date.now()}.${ext}`;
+      const formData = new FormData();
+      formData.append('file', { uri: licenseImage, name: fileName, type: `image/${ext}` } as any);
+
+      const { error: uploadError } = await supabase.storage
+        .from('licenses')
+        .upload(fileName, formData, { contentType: `image/${ext}`, upsert: false });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage.from('licenses').getPublicUrl(fileName);
+
       const { error } = await supabase
         .from('psychiatrists')
         .insert({
           user_id: user?.id,
           full_name: form.fullName,
           license_number: form.licenseNumber,
-          license_image_url: licenseImage,
+          license_image_url: publicUrl,
           specialization: form.specialization,
           experience: parseInt(form.experience),
           bio: form.bio,

@@ -25,12 +25,14 @@ function ClientTabs() {
           let iconName: any;
           if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
           else if (route.name === 'Find') iconName = focused ? 'search' : 'search-outline';
+          else if (route.name === 'Chat') iconName = focused ? 'sparkles' : 'sparkles-outline';
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
       <Tab.Screen name="Home" component={ClientHomeScreen} />
       <Tab.Screen name="Find" component={FindPsychScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} options={{ tabBarLabel: 'AI Chat' }} />
     </Tab.Navigator>
   );
 }
@@ -40,7 +42,6 @@ export default function ClientNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ClientTabs" component={ClientTabs} />
       <Stack.Screen name="SessionRequest" component={SessionRequestScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="VideoCall" component={VideoCallScreen} />
       <Stack.Screen name="MySessions" component={MySessionsScreen} />
       <Stack.Screen name="SelfCare" component={SelfCareScreen} />

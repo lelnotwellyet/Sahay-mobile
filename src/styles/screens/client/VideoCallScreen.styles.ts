@@ -29,4 +29,22 @@ export default StyleSheet.create({
     backgroundColor: colors.dark, gap: 14, zIndex: 10,
   },
   loadingText: { color: colors.white, fontSize: 15, opacity: 0.7 },
+  ratingOverlay: {
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center', justifyContent: 'center', padding: 24,
+  },
+  ratingCard: {
+    backgroundColor: colors.white, borderRadius: 24,
+    padding: 28, alignItems: 'center', width: '100%',
+  },
+  ratingTitle: { fontSize: 20, fontWeight: '800', color: colors.dark, marginBottom: 6 },
+  ratingSubtitle: { fontSize: 14, color: colors.text, marginBottom: 24, textAlign: 'center' },
+  starsRow: { flexDirection: 'row', gap: 12, marginBottom: 28 },
+  skipBtn: { paddingVertical: 10, paddingHorizontal: 24 },
+  skipText: { fontSize: 14, color: colors.subtext, fontWeight: '600' },
+  submitRatingBtn: {
+    backgroundColor: colors.primary, paddingVertical: 14,
+    paddingHorizontal: 40, borderRadius: 16, marginBottom: 8,
+  },
+  submitRatingText: { color: colors.white, fontSize: 16, fontWeight: '700' },
 });

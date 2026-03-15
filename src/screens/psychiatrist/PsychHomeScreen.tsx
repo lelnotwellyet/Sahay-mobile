@@ -192,13 +192,13 @@ export default function PsychHomeScreen() {
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionCard}>
+        <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('EditProfile')}>
           <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="analytics" size={24} color="#4CAF50" />
+            <Ionicons name="create-outline" size={24} color="#4CAF50" />
           </View>
           <View style={styles.actionText}>
-            <Text style={styles.actionTitle}>My Stats</Text>
-            <Text style={styles.actionSub}>{psych?.experience ?? 0} years of experience</Text>
+            <Text style={styles.actionTitle}>Edit Profile</Text>
+            <Text style={styles.actionSub}>Update bio, specialization & experience</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
