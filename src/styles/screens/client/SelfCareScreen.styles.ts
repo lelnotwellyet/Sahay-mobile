@@ -14,13 +14,20 @@ export default StyleSheet.create({
   },
   moodDot: { width: 10, height: 10, borderRadius: 5 },
   moodBannerText: { fontSize: 13, fontWeight: '600' },
-  moodFilters: { paddingLeft: 24, paddingRight: 24, paddingBottom: 16, gap: 8 },
-  moodChip: {
-    paddingHorizontal: 20, paddingVertical: 10,
-    borderRadius: 20, backgroundColor: colors.white, borderWidth: 1.5, borderColor: colors.border,
-    flexShrink: 0, minWidth: 60, alignItems: 'center' as const, justifyContent: 'center' as const,
+  moodFilters: {
+    flexDirection: 'row', flexWrap: 'wrap',
+    paddingHorizontal: 24, paddingBottom: 16, gap: 10,
   },
-  moodChipText: { fontSize: 13, fontWeight: '600', color: colors.text, textAlign: 'center' as const, flexShrink: 0 },
+  moodChip: {
+    paddingHorizontal: 18, paddingVertical: 10,
+    borderRadius: 24, backgroundColor: colors.white,
+    borderWidth: 1.5, borderColor: colors.border,
+    alignItems: 'center' as const, justifyContent: 'center' as const,
+    elevation: 2,
+  },
+  moodChipText: {
+    fontSize: 13, fontWeight: '600', color: colors.text,
+  },
   list: { paddingHorizontal: 24, paddingBottom: 40 },
   videoCard: {
     backgroundColor: colors.white, borderRadius: 20, marginBottom: 16,

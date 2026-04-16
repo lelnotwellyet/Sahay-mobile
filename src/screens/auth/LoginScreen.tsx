@@ -10,6 +10,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '@/navigation/AuthNavigator';
 import { useAuth } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import { isValidEmail } from '@/utils/validators';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 import styles from '@/styles/screens/auth/LoginScreen.styles';
 
 type Nav = StackNavigationProp<AuthStackParamList, 'Login'>;
@@ -22,19 +25,60 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !password) {
       showToast('Please fill in all fields', 'error');
+      return;
+    }
+    if (!isValidEmail(trimmedEmail)) {
+      showToast('Please enter a valid email', 'error');
       return;
     }
     setLoading(true);
     try {
-      await signInEmail(email, password);
+      await signInEmail(trimmedEmail, password);
     } catch (e: any) {
-      showToast(e.message || 'Login failed', 'error');
+      if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') {
+        showToast('No account found with this email', 'error');
+      } else if (e.code === 'auth/wrong-password') {
+        showToast('Incorrect password', 'error');
+      } else if (e.code === 'auth/too-many-requests') {
+        showToast('Too many attempts. Please try again later.', 'error');
+      } else if (e.code === 'auth/invalid-email') {
+        showToast('Invalid email address', 'error');
+      } else {
+        showToast(e.message || 'Login failed', 'error');
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
+      showToast('Enter your email above first', 'info');
+      return;
+    }
+    if (!isValidEmail(trimmedEmail)) {
+      showToast('Enter a valid email to reset password', 'error');
+      return;
+    }
+    setResetLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, trimmedEmail);
+      showToast('Password reset email sent! Check your inbox.', 'success');
+    } catch (e: any) {
+      if (e.code === 'auth/user-not-found') {
+        showToast('No account found with this email', 'error');
+      } else {
+        showToast(e.message || 'Failed to send reset email', 'error');
+      }
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -79,10 +123,17 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity onPress={handleForgotPassword} disabled={resetLoading}>
+          <Text style={styles.forgotText}>
+            {resetLoading ? 'Sending...' : 'Forgot Password?'}
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.loginBtn}
           onPress={handleLogin}
           disabled={loading}
+          activeOpacity={0.7}
         >
           {loading ? (
             <ActivityIndicator color="#fff" />

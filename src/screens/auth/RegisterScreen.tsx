@@ -49,7 +49,7 @@ export default function RegisterScreen() {
     if (!validate()) return;
     setLoading(true);
     try {
-      await registerEmail(email, password, role);
+      await registerEmail(email.trim(), password, role);
     } catch (e: any) {
       if (e.code === 'auth/email-already-in-use') {
         showToast('This email is already registered', 'error');

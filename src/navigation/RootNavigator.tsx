@@ -5,6 +5,7 @@ import AuthNavigator from './AuthNavigator';
 import ClientNavigator from './ClientNavigator';
 import PsychNavigator from './PsychNavigator';
 import AdminNavigator from './AdminNavigator';
+import EmailVerificationScreen from '@/screens/auth/EmailVerificationScreen';
 
 export default function RootNavigator() {
   const { user, loading } = useAuth();
@@ -18,6 +19,11 @@ export default function RootNavigator() {
   }
 
   if (!user) return <AuthNavigator />;
+
+  if (!user.isAnonymous && !user.emailVerified && user.role === 'client') {
+    return <EmailVerificationScreen />;
+  }
+
   if (user.role === 'client') return <ClientNavigator />;
   if (user.role === 'psychiatrist') return <PsychNavigator />;
   return <AdminNavigator />;

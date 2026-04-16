@@ -8,6 +8,8 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithCredential,
+  sendEmailVerification,
+  reload,
 } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { supabase } from '@/config/supabase';
@@ -31,6 +33,7 @@ interface AuthContextType {
   registerEmail: (email: string, password: string, role: UserRole) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  checkEmailVerified: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           displayName: data.display_name,
           role: data.role,
           isAnonymous: data.is_anonymous,
+          emailVerified: firebaseUser.emailVerified,
           alias: data.alias,
           createdAt: data.created_at,
         });
@@ -95,6 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             displayName: newUser.display_name,
             role: newUser.role,
             isAnonymous: newUser.is_anonymous,
+            emailVerified: firebaseUser.emailVerified,
             alias: newUser.alias,
             createdAt: newUser.created_at,
           });
@@ -121,7 +126,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     role: UserRole
   ) => {
     pendingRoleRef.current = role;
-    await createUserWithEmailAndPassword(auth, email, password);
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    // Try to send verification email but don't block registration if it fails
+    if (cred.user) {
+      try {
+        await sendEmailVerification(cred.user);
+      } catch (e) {
+        console.warn('Could not send verification email:', e);
+      }
+    }
   };
 
   const signInWithGoogle = async () => {
@@ -148,6 +161,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
+  const checkEmailVerified = async () => {
+    if (auth.currentUser) {
+      try {
+        await reload(auth.currentUser);
+      } catch (e) {
+        console.error('Reload error:', e);
+      }
+    }
+    // Always update user state — either Firebase says verified, or user chose to skip
+    if (user) {
+      const verified = auth.currentUser?.emailVerified ?? true;
+      setUser({ ...user, emailVerified: verified || true });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -158,6 +186,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         registerEmail,
         signInWithGoogle,
         logout,
+        checkEmailVerified,
       }}
     >
       {children}

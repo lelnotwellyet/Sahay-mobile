@@ -45,7 +45,7 @@ export default function OnboardingScreen() {
     const newErrors: Record<string, string> = {};
     if (!form.fullName) newErrors.fullName = 'Full name is required';
     if (!form.licenseNumber) newErrors.licenseNumber = 'License number is required';
-    if (form.licenseNumber.length < 5) newErrors.licenseNumber = 'Enter a valid license number';
+    else if (form.licenseNumber.length < 5) newErrors.licenseNumber = 'Enter a valid license number';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

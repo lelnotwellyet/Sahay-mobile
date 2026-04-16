@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TouchableOpacity,
-  FlatList, Image, Modal, ScrollView,
+  FlatList, Image, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
@@ -14,12 +14,12 @@ type RouteParams = {
 };
 
 const MOODS = [
-  { label: 'All',   color: '#6C63FF' },
-  { label: 'Great', color: '#4CAF50' },
-  { label: 'Good',  color: '#8BC34A' },
-  { label: 'Okay',  color: '#FFC107' },
-  { label: 'Low',   color: '#FF9800' },
-  { label: 'Bad',   color: '#F44336' },
+  { label: 'All',   color: '#6C63FF', displayName: 'All' },
+  { label: 'Great', color: '#4CAF50', displayName: '😊 Happy' },
+  { label: 'Good',  color: '#8BC34A', displayName: '😌 Calm' },
+  { label: 'Okay',  color: '#FFC107', displayName: '😐 Okay' },
+  { label: 'Low',   color: '#FF9800', displayName: '😰 Anxious' },
+  { label: 'Bad',   color: '#F44336', displayName: '😢 Sad' },
 ];
 
 interface Video {
@@ -138,28 +138,27 @@ export default function SelfCareScreen() {
         <Text style={[styles.moodBannerText, { color: moodConfig.color }]}>
           {selectedMood === 'All'
             ? 'Showing all resources'
-            : `Resources for when you feel ${selectedMood.toLowerCase()}`}
+            : `Resources for when you're feeling ${moodConfig.displayName}`}
         </Text>
       </View>
 
       {/* Mood filter chips */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.moodFilters}
-      >
+      <View style={styles.moodFilters}>
         {MOODS.map(m => (
           <TouchableOpacity
             key={m.label}
-            style={[styles.moodChip, selectedMood === m.label && { backgroundColor: m.color, borderColor: m.color }]}
+            style={[
+              styles.moodChip,
+              selectedMood === m.label && { backgroundColor: m.color, borderColor: m.color },
+            ]}
             onPress={() => setSelectedMood(m.label)}
           >
             <Text style={[styles.moodChipText, selectedMood === m.label && { color: '#fff' }]}>
-              {m.label}
+              {m.displayName}
             </Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </View>
 
       {/* In-app YouTube player */}
       <Modal visible={!!activeVideo} animationType="slide" onRequestClose={() => setActiveVideo(null)}>

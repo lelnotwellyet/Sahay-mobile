@@ -9,6 +9,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import { sendSessionRequestNotification } from '@/utils/notifications';
+import { useToast } from '@/context/ToastContext';
 import styles from '@/styles/screens/client/PaymentScreen.styles';
 
 type RouteParams = {
@@ -29,6 +30,7 @@ export default function PaymentScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<RouteParams, 'Payment'>>();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const { psychiatrist } = route.params;
 
   const [method, setMethod] = useState<PaymentMethod>('upi');
@@ -73,14 +75,28 @@ export default function PaymentScreen() {
         sessionId: data.id,
         psychiatrist,
       });
-    } catch {
+    } catch (e: any) {
+      showToast('Session creation failed. Please contact support.', 'error');
       navigation.replace('ClientTabs');
     } finally {
       setPaying(false);
     }
   };
 
-  const isPayReady = method === 'upi' ? upiId.includes('@') : (cardNumber.length >= 16 && expiry.length === 5 && cvv.length === 3);
+  const isValidExpiry = (exp: string) => {
+    if (exp.length !== 5) return false;
+    const [mm, yy] = exp.split('/');
+    const month = parseInt(mm, 10);
+    const year = parseInt(yy, 10) + 2000;
+    if (month < 1 || month > 12) return false;
+    const now = new Date();
+    const expiryDate = new Date(year, month);
+    return expiryDate > now;
+  };
+
+  const isPayReady = method === 'upi'
+    ? upiId.includes('@') && upiId.indexOf('@') > 0 && upiId.indexOf('@') < upiId.length - 1
+    : (cardNumber.length >= 16 && isValidExpiry(expiry) && cvv.length === 3);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -210,6 +226,7 @@ export default function PaymentScreen() {
           style={[styles.payBtn, (!isPayReady || paying) && { opacity: 0.6 }]}
           onPress={handlePay}
           disabled={!isPayReady || paying}
+          activeOpacity={0.7}
         >
           {paying && !success
             ? <ActivityIndicator color="#fff" />

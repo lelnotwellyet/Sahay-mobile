@@ -20,4 +20,5 @@ export default StyleSheet.create({
   loginText: { color: colors.white, fontSize: 16, fontWeight: '700' },
   registerLink: { textAlign: 'center', color: colors.subtext, fontSize: 14, marginTop: 20 },
   registerLinkBold: { color: colors.primary, fontWeight: '700' },
+  forgotText: { color: colors.primary, fontSize: 13, fontWeight: '600', textAlign: 'right', marginBottom: 8, marginTop: -4 },
 });

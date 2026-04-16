@@ -8,6 +8,7 @@ export interface User {
   displayName?: string;
   role: UserRole;
   isAnonymous: boolean;
+  emailVerified: boolean;
   alias?: string;
   createdAt: string;
 }
