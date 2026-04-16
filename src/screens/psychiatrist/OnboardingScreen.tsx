@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  SafeAreaView, TextInput, Alert, ActivityIndicator,
+  SafeAreaView, TextInput, ActivityIndicator,
   ScrollView, Image
 } from 'react-native';
+import { useToast } from '@/context/ToastContext';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '@/context/AuthContext';
@@ -24,6 +25,7 @@ const SPECIALIZATIONS = [
 export default function OnboardingScreen() {
   const { user } = useAuth();
   const navigation = useNavigation<any>();
+  const { showToast } = useToast();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [licenseImage, setLicenseImage] = useState<string | null>(null);
@@ -34,6 +36,7 @@ export default function OnboardingScreen() {
     specialization: '',
     experience: '',
     bio: '',
+    price: '199',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -56,6 +59,9 @@ export default function OnboardingScreen() {
     if (Number(form.experience) > 50) newErrors.experience = 'Experience cannot exceed 50 years';
     if (!form.bio) newErrors.bio = 'Please write a short bio';
     if (form.bio.length < 20) newErrors.bio = 'Bio must be at least 20 characters';
+    if (!form.price) newErrors.price = 'Price is required';
+    const priceNum = Number(form.price);
+    if (isNaN(priceNum) || priceNum < 99 || priceNum > 499) newErrors.price = 'Price must be between ₹99 and ₹499';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -63,7 +69,7 @@ export default function OnboardingScreen() {
   const pickLicenseImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please allow access to your photo library');
+      showToast('Please allow access to your photo library', 'error');
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -78,7 +84,7 @@ export default function OnboardingScreen() {
 
   const handleSubmit = async () => {
     if (!licenseImage) {
-      Alert.alert('Required', 'Please upload your license image');
+      showToast('Please upload your license image', 'error');
       return;
     }
     setLoading(true);
@@ -107,6 +113,7 @@ export default function OnboardingScreen() {
           specialization: form.specialization,
           experience: parseInt(form.experience),
           bio: form.bio,
+          price: parseInt(form.price),
           is_approved: false,
           is_online: false,
           rating: 5.0,
@@ -121,13 +128,10 @@ export default function OnboardingScreen() {
         .update({ role: 'psychiatrist' })
         .eq('id', user?.id);
 
-      Alert.alert(
-        'Application Submitted! 🎉',
-        'Your application is under review. You will be notified once approved by admin.',
-        [{ text: 'OK', onPress: () => navigation.navigate('PsychTabs') }]
-      );
+      showToast('Application submitted! 🎉 You will be notified once approved.', 'success');
+      navigation.navigate('PsychTabs');
     } catch (e: any) {
-      Alert.alert('Error', e.message);
+      showToast(e.message || 'Submission failed', 'error');
     } finally {
       setLoading(false);
     }
@@ -257,6 +261,20 @@ export default function OnboardingScreen() {
               />
             </View>
             {errors.bio ? <Text style={styles.errorText}>{errors.bio}</Text> : null}
+
+            <Text style={styles.label}>Session Price (₹99 – ₹499)</Text>
+            <View style={[styles.inputContainer, errors.price && styles.inputError]}>
+              <Text style={[styles.inputIcon, { fontSize: 16, color: '#999' }]}>₹</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="e.g. 199"
+                placeholderTextColor="#999"
+                value={form.price}
+                onChangeText={(t) => { setForm(f => ({ ...f, price: t })); setErrors(e => ({ ...e, price: '' })); }}
+                keyboardType="numeric"
+              />
+            </View>
+            {errors.price ? <Text style={styles.errorText}>{errors.price}</Text> : null}
 
             <View style={styles.btnRow}>
               <TouchableOpacity style={styles.backBtn} onPress={() => setStep(1)}>

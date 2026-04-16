@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
 import styles from '@/styles/screens/client/ClientHomeScreen.styles';
+import CrisisHelplineBanner from '@/components/common/CrisisHelplineBanner';
 
 const MOODS = [
   { emoji: '😊', label: 'Great', color: '#4CAF50' },
@@ -146,10 +147,7 @@ export default function ClientHomeScreen() {
         </TouchableOpacity>
 
         {/* Crisis help */}
-        <View style={styles.crisisCard}>
-          <Ionicons name="warning" size={20} color="#F44336" />
-          <Text style={styles.crisisText}>In crisis? Call <Text style={styles.crisisNumber}>iCall: 9152987821</Text></Text>
-        </View>
+        <CrisisHelplineBanner />
 
       </ScrollView>
     </SafeAreaView>

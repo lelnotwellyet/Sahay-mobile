@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {
   View, Text, TouchableOpacity,
-  SafeAreaView, TextInput, Alert, ActivityIndicator,
+  SafeAreaView, TextInput, ActivityIndicator,
   KeyboardAvoidingView, Platform, ScrollView
 } from 'react-native';
+import { useToast } from '@/context/ToastContext';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '@/navigation/AuthNavigator';
@@ -19,6 +20,7 @@ export default function RegisterScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const { registerEmail, signInWithGoogle } = useAuth();
+  const { showToast } = useToast();
   const role = route.params?.role ?? 'client';
 
   const [email, setEmail] = useState('');
@@ -50,11 +52,11 @@ export default function RegisterScreen() {
       await registerEmail(email, password, role);
     } catch (e: any) {
       if (e.code === 'auth/email-already-in-use') {
-        Alert.alert('Error', 'This email is already registered');
+        showToast('This email is already registered', 'error');
       } else if (e.code === 'auth/invalid-email') {
-        Alert.alert('Error', 'Invalid email address');
+        showToast('Invalid email address', 'error');
       } else {
-        Alert.alert('Registration Failed', e.message);
+        showToast(e.message || 'Registration failed', 'error');
       }
     } finally {
       setLoading(false);
@@ -66,7 +68,7 @@ export default function RegisterScreen() {
     try {
       await signInWithGoogle();
     } catch (e: any) {
-      Alert.alert('Google Sign In Failed', e.message);
+      showToast(e.message || 'Google Sign In failed', 'error');
     } finally {
       setGoogleLoading(false);
     }

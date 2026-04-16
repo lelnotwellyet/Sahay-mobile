@@ -1,11 +1,48 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from '@/styles/theme';
+
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.dark },
+
+  // Remote video — fullscreen background
+  remoteVideo: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+
+  // Local video — small overlay in top-right
+  localVideoWrap: {
+    position: 'absolute',
+    top: 100,
+    right: 16,
+    width: 120,
+    height: 160,
+    borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: colors.primary,
+    zIndex: 10,
+  },
+  localVideo: {
+    flex: 1,
+    backgroundColor: '#222',
+  },
+
+  // Header overlay
   header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 16, paddingVertical: 12, backgroundColor: colors.dark,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    zIndex: 20,
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatar: {
@@ -17,18 +54,53 @@ export default StyleSheet.create({
   liveRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 2 },
   liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.success },
   liveText: { fontSize: 12, color: colors.success, fontWeight: '600' },
+
+  // Bottom controls bar
+  controlsBar: {
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+    zIndex: 20,
+  },
+  controlBtn: {
+    width: 56, height: 56, borderRadius: 28,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  controlBtnActive: {
+    backgroundColor: 'rgba(255,255,255,0.5)',
+  },
   endBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: colors.error, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
+    width: 64, height: 64, borderRadius: 32,
+    backgroundColor: colors.error,
+    alignItems: 'center', justifyContent: 'center',
   },
   endBtnText: { color: colors.white, fontWeight: '700', fontSize: 14 },
-  webview: { flex: 1 },
+
+  // Connecting overlay
   loadingOverlay: {
-    position: 'absolute', top: 80, left: 0, right: 0, bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     alignItems: 'center', justifyContent: 'center',
-    backgroundColor: colors.dark, gap: 14, zIndex: 10,
+    backgroundColor: colors.dark, gap: 14, zIndex: 5,
   },
   loadingText: { color: colors.white, fontSize: 15, opacity: 0.7 },
+  connectingSubtext: { color: colors.subtext, fontSize: 13, marginTop: 4 },
+
+  // Camera-off placeholder
+  cameraOffPlaceholder: {
+    flex: 1,
+    backgroundColor: '#1a1a2e',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cameraOffText: { color: colors.subtext, fontSize: 14, marginTop: 8 },
+
+  // Rating modal (kept from original)
   ratingOverlay: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.6)',
     alignItems: 'center', justifyContent: 'center', padding: 24,

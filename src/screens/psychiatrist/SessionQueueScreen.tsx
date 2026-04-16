@@ -3,8 +3,10 @@ import {
   View, Text, FlatList,
   TouchableOpacity, SafeAreaView, ActivityIndicator, Alert,
 } from 'react-native';
+import { SkeletonList } from '@/components/common/SkeletonCard';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/context/ToastContext';
 import { supabase } from '@/config/supabase';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import styles from '@/styles/screens/psychiatrist/SessionQueueScreen.styles';
@@ -21,6 +23,7 @@ interface QueueSession {
 export default function SessionQueueScreen() {
   const { user } = useAuth();
   const navigation = useNavigation<any>();
+  const { showToast } = useToast();
   const [psychId, setPsychId] = useState<string | null>(null);
   const [sessions, setSessions] = useState<QueueSession[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +81,7 @@ export default function SessionQueueScreen() {
       .eq('id', session.id);
 
     if (error) {
-      Alert.alert('Error', error.message);
+      showToast(error.message || 'Failed to accept session', 'error');
     } else {
       const screen = session.type === 'video' ? 'VideoCall' : 'Chat';
       navigation.navigate(screen, { sessionId: session.id, clientAlias: session.clientAlias });
@@ -179,9 +182,13 @@ export default function SessionQueueScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#6C63FF" />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Session Queue</Text>
+          <View style={{ width: 22 }} />
+        </View>
+        <SkeletonList count={3} type="session" />
+      </SafeAreaView>
     );
   }
 

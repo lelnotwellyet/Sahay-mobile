@@ -44,4 +44,12 @@ export default StyleSheet.create({
     minWidth: 20, height: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6,
   },
   badgeText: { color: colors.white, fontSize: 11, fontWeight: '700' },
+  ratingRow: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    backgroundColor: colors.white, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12,
+    marginHorizontal: 24, marginBottom: 8,
+    ...shadow,
+  },
+  ratingStars: { flexDirection: 'row', gap: 2 },
+  ratingDate: { fontSize: 13, color: colors.subtext },
 });

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {
   View, Text, TouchableOpacity,
-  SafeAreaView, TextInput, Alert, ActivityIndicator,
+  SafeAreaView, TextInput, ActivityIndicator,
   KeyboardAvoidingView, Platform
 } from 'react-native';
+import { useToast } from '@/context/ToastContext';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '@/navigation/AuthNavigator';
@@ -16,6 +17,7 @@ type Nav = StackNavigationProp<AuthStackParamList, 'Login'>;
 export default function LoginScreen() {
   const navigation = useNavigation<Nav>();
   const { signInEmail } = useAuth();
+  const { showToast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,14 +25,14 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
+      showToast('Please fill in all fields', 'error');
       return;
     }
     setLoading(true);
     try {
       await signInEmail(email, password);
     } catch (e: any) {
-      Alert.alert('Login Failed', e.message);
+      showToast(e.message || 'Login failed', 'error');
     } finally {
       setLoading(false);
     }

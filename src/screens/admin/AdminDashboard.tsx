@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity,
-  SafeAreaView, ScrollView, Alert, ActivityIndicator,
+  SafeAreaView, ScrollView, Alert,
 } from 'react-native';
+import { SkeletonList } from '@/components/common/SkeletonCard';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/config/supabase';
@@ -60,9 +61,17 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#6C63FF" />
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.title}>Admin Panel</Text>
+            <Text style={styles.subtitle}>Sahay Management</Text>
+          </View>
+          <View style={{ width: 24 }} />
+        </View>
+        <Text style={styles.sectionTitle}>Overview</Text>
+        <SkeletonList count={4} type="stat" />
+      </SafeAreaView>
     );
   }
 

@@ -17,6 +17,7 @@ export default function PsychHomeScreen() {
   const [pendingCount, setPendingCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
+  const [recentRatings, setRecentRatings] = useState<{ rating: number; ended_at: string }[]>([]);
 
   const fetchProfile = async () => {
     if (!user) return;
@@ -27,6 +28,15 @@ export default function PsychHomeScreen() {
       .single();
 
     if (data) {
+      // Fetch recent ratings
+      const { data: ratings } = await supabase
+        .from('psychiatrist_ratings')
+        .select('rating, ended_at')
+        .eq('psychiatrist_id', data.id)
+        .order('ended_at', { ascending: false })
+        .limit(10);
+      if (ratings) setRecentRatings(ratings);
+
       setPsych({
         id: data.id,
         userId: data.user_id,
@@ -202,6 +212,30 @@ export default function PsychHomeScreen() {
           </View>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
+
+        {/* Recent Ratings */}
+        {recentRatings.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>Recent Ratings</Text>
+            {recentRatings.map((r, i) => (
+              <View key={i} style={styles.ratingRow}>
+                <View style={styles.ratingStars}>
+                  {[1,2,3,4,5].map(star => (
+                    <Ionicons
+                      key={star}
+                      name={star <= r.rating ? 'star' : 'star-outline'}
+                      size={18}
+                      color={star <= r.rating ? '#FFC107' : '#ddd'}
+                    />
+                  ))}
+                </View>
+                <Text style={styles.ratingDate}>
+                  {new Date(r.ended_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </Text>
+              </View>
+            ))}
+          </>
+        )}
 
       </ScrollView>
     </SafeAreaView>

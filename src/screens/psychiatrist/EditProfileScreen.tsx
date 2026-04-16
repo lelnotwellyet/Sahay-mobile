@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, TextInput,
-  ScrollView, Alert, ActivityIndicator,
+  ScrollView, ActivityIndicator,
 } from 'react-native';
+import { useToast } from '@/context/ToastContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -24,10 +25,11 @@ const SPECIALIZATIONS = [
 export default function EditProfileScreen() {
   const navigation = useNavigation<any>();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [psychId, setPsychId] = useState<string | null>(null);
-  const [form, setForm] = useState({ specialization: '', experience: '', bio: '' });
+  const [form, setForm] = useState({ specialization: '', experience: '', bio: '', price: '199' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function EditProfileScreen() {
       if (!user) return;
       const { data } = await supabase
         .from('psychiatrists')
-        .select('id, specialization, experience, bio')
+        .select('id, specialization, experience, bio, price')
         .eq('user_id', user.id)
         .single();
       if (data) {
@@ -44,6 +46,7 @@ export default function EditProfileScreen() {
           specialization: data.specialization ?? '',
           experience: String(data.experience ?? ''),
           bio: data.bio ?? '',
+          price: String(data.price ?? '199'),
         });
       }
       setLoading(false);
@@ -60,6 +63,8 @@ export default function EditProfileScreen() {
     if (Number(form.experience) > 50) newErrors.experience = 'Cannot exceed 50 years';
     if (!form.bio) newErrors.bio = 'Bio is required';
     if (form.bio.length < 20) newErrors.bio = 'Bio must be at least 20 characters';
+    const priceNum = Number(form.price);
+    if (!form.price || isNaN(priceNum) || priceNum < 99 || priceNum > 499) newErrors.price = 'Price must be between ₹99 and ₹499';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -74,14 +79,14 @@ export default function EditProfileScreen() {
           specialization: form.specialization,
           experience: parseInt(form.experience),
           bio: form.bio,
+          price: parseInt(form.price),
         })
         .eq('id', psychId);
       if (error) throw error;
-      Alert.alert('Saved', 'Your profile has been updated.', [
-        { text: 'OK', onPress: () => navigation.goBack() },
-      ]);
+      showToast('Your profile has been updated', 'success');
+      navigation.goBack();
     } catch (e: any) {
-      Alert.alert('Error', e.message);
+      showToast(e.message || 'Failed to save profile', 'error');
     } finally {
       setSaving(false);
     }
@@ -147,6 +152,20 @@ export default function EditProfileScreen() {
         </View>
         {errors.bio ? <Text style={styles.errorText}>{errors.bio}</Text> : null}
         <Text style={styles.charCount}>{form.bio.length} characters</Text>
+
+        <Text style={styles.label}>Session Price (₹99 – ₹499)</Text>
+        <View style={[styles.inputContainer, errors.price && styles.inputError]}>
+          <Text style={[styles.inputIcon, { fontSize: 16, color: '#999' }]}>₹</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="e.g. 199"
+            placeholderTextColor="#999"
+            value={form.price}
+            onChangeText={t => { setForm(f => ({ ...f, price: t })); setErrors(e => ({ ...e, price: '' })); }}
+            keyboardType="numeric"
+          />
+        </View>
+        {errors.price ? <Text style={styles.errorText}>{errors.price}</Text> : null}
 
         <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.7 }]} onPress={save} disabled={saving}>
           {saving

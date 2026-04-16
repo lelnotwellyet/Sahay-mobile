@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sahay — Project Diagrams</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f8f9fa;
+      color: #1a1a2e;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    h1 small {
+      display: block;
+      font-size: 14px;
+      color: #666;
+      font-weight: normal;
+      margin-top: 4px;
+    }
+    h2 {
+      background: #6C63FF;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 18px;
+      margin-top: 60px;
+    }
+    .diagram-box {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      overflow-x: auto;
+    }
+    .note {
+      background: #EEF0FF;
+      border-left: 4px solid #6C63FF;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 16px;
+    }
+    hr { border: none; border-top: 2px dashed #ddd; margin: 60px 0; }
+  </style>
+</head>
+<body>
+
+<h1>Sahay: AI-Powered Mobile Mental Health Platform
+  <small>Project Diagrams — Open in browser, screenshot each diagram for your whitebook</small>
+</h1>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 2.4 — Gantt Chart (Project Timeline)</h2>
+<!-- ============================================================ -->
+<div class="note">Right-click → "Save image as" or take a screenshot of each diagram.</div>
+<div class="diagram-box">
+<pre class="mermaid">
+gantt
+    title Sahay Development Timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %Y
+
+    section Planning
+    Project Planning & Research           :a1, 2025-12-01, 2026-01-31
+
+    section Backend Setup
+    Firebase Auth & Supabase Setup        :a2, 2026-01-10, 2026-01-31
+
+    section Frontend
+    React Native App Scaffolding          :a3, 2026-01-20, 2026-02-28
+    Auth Screens + Navigation             :a4, 2026-02-01, 2026-02-28
+    Client Screens (Home, Find, Request)  :a5, 2026-02-15, 2026-03-15
+
+    section Professional
+    Psychiatrist Onboarding & Queue       :a6, 2026-03-01, 2026-03-20
+    Admin Dashboard & Approval Flow       :a7, 2026-03-05, 2026-03-25
+
+    section Features
+    AI Chat Integration (Gemini)          :a8, 2026-03-10, 2026-03-30
+    WebRTC Video Call System              :a9, 2026-03-15, 2026-04-10
+    Self Care Module                      :a10, 2026-04-01, 2026-04-12
+
+    section QA
+    Testing, Debugging & Optimization     :a11, 2026-04-01, 2026-04-15
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.3 — Use Case Diagram</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart LR
+    Client((Client))
+    Psychiatrist((Psychiatrist))
+    Admin((Admin))
+
+    subgraph SAHAY_PLATFORM ["Sahay Platform"]
+        UC1["UC1: Anonymous /<br>Authenticated Login"]
+        UC2["UC2: Browse Online<br>Psychiatrists"]
+        UC3["UC3: Request Session"]
+        UC4["UC4: Video Consultation"]
+        UC5["UC5: Rate Session"]
+        UC6["UC6: AI Chat Support"]
+        UC7["UC7: Access Self<br>Care Resources"]
+        UC8["UC8: Register &<br>Complete Onboarding"]
+        UC9["UC9: Toggle Online /<br>Offline Status"]
+        UC10["UC10: Accept / Decline<br>Session Requests"]
+        UC11["UC11: Conduct Video<br>Consultation"]
+        UC12["UC12: Edit Professional<br>Profile"]
+        UC13["UC13: View Platform<br>Dashboard"]
+        UC14["UC14: Review Psychiatrist<br>Applications"]
+        UC15["UC15: Approve / Reject<br>Applications"]
+    end
+
+    Client --- UC1
+    Client --- UC2
+    Client --- UC3
+    Client --- UC4
+    Client --- UC5
+    Client --- UC6
+    Client --- UC7
+
+    UC3 -. "includes" .-> UC4
+
+    Psychiatrist --- UC1
+    Psychiatrist --- UC8
+    Psychiatrist --- UC9
+    Psychiatrist --- UC10
+    Psychiatrist --- UC11
+    Psychiatrist --- UC12
+
+    Admin --- UC13
+    Admin --- UC14
+    Admin --- UC15
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.4 — Entity-Relationship Diagram (ERD)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+erDiagram
+    USERS {
+        UUID id PK
+        VARCHAR firebase_uid UK
+        VARCHAR email
+        VARCHAR display_name
+        VARCHAR role
+        BOOLEAN is_anonymous
+        VARCHAR alias
+        TIMESTAMPTZ created_at
+    }
+
+    PSYCHIATRISTS {
+        UUID id PK
+        UUID user_id FK
+        VARCHAR full_name
+        VARCHAR license_number
+        TEXT license_image_url
+        VARCHAR specialization
+        INTEGER experience
+        TEXT bio
+        INTEGER price
+        BOOLEAN is_approved
+        BOOLEAN is_online
+        DECIMAL rating
+        INTEGER total_sessions
+        TIMESTAMPTZ created_at
+    }
+
+    SESSIONS {
+        UUID id PK
+        UUID client_id FK
+        UUID psychiatrist_id FK
+        VARCHAR status
+        VARCHAR type
+        INTEGER rating
+        TIMESTAMPTZ started_at
+        TIMESTAMPTZ ended_at
+        TIMESTAMPTZ created_at
+    }
+
+    MESSAGES {
+        UUID id PK
+        UUID session_id FK
+        UUID sender_id FK
+        TEXT text
+        TIMESTAMPTZ created_at
+    }
+
+    NOTIFICATIONS {
+        UUID id PK
+        UUID user_id FK
+        VARCHAR title
+        TEXT body
+        JSONB data
+        BOOLEAN read
+        TIMESTAMPTZ created_at
+    }
+
+    USERS ||--o| PSYCHIATRISTS : "has profile"
+    USERS ||--o{ SESSIONS : "requests as client"
+    PSYCHIATRISTS ||--o{ SESSIONS : "conducts"
+    SESSIONS ||--o{ MESSAGES : "contains"
+    USERS ||--o{ MESSAGES : "sends"
+    USERS ||--o{ NOTIFICATIONS : "receives"
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.5 — System Flow Diagram</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart TD
+    A([START]) --> B[User Opens App]
+    B --> C[Authentication Screen]
+    C --> D{Choose Auth Method}
+    D -->|Anonymous| E1[Firebase Anonymous Sign-In]
+    D -->|Email| E2[Firebase Email Auth]
+    D -->|Google| E3[Firebase Google OAuth]
+    E1 --> F{Existing User?}
+    E2 --> F
+    E3 --> F
+    F -->|Yes| G[Fetch User from Supabase]
+    F -->|No| H[Create User Record + Generate Alias]
+    G --> I{Role Check}
+    H --> I
+    I -->|Client| J[Client Navigator]
+    I -->|Psychiatrist| K[Psych Navigator]
+    I -->|Admin| L[Admin Navigator]
+
+    J --> M[Browse Psychiatrists<br>FindPsychScreen]
+    M --> N[Select Psychiatrist<br>SessionRequestScreen]
+    N --> O["Payment Screen<br>Pay ₹(price)"]
+    O --> P[Create Pending Session<br>in Supabase]
+    P --> Q[Session Waiting Screen]
+    Q --> R{Status = active?}
+    R -->|No - Poll 3s| Q
+    R -->|Yes| S[Initialize WebRTC<br>Get Camera & Mic]
+    S --> T[Subscribe to Supabase<br>Realtime Channel]
+    T --> U[SDP Offer / Answer<br>Exchange]
+    U --> V[ICE Candidate<br>Negotiation]
+    V --> W[P2P Connection<br>Established ✓]
+    W --> X{End Call?}
+    X -->|No| W
+    X -->|Yes| Y[Cleanup WebRTC<br>Close PeerConnection]
+    Y --> Z[Update Session<br>status = completed]
+    Z --> AA[Rating Modal<br>1-5 Stars or Skip]
+    AA --> AB[Navigate to Home]
+    AB --> AC([END])
+
+    style A fill:#4CAF50,color:#fff
+    style AC fill:#f44336,color:#fff
+    style W fill:#6C63FF,color:#fff
+    style R fill:#FF9800,color:#fff
+    style F fill:#FF9800,color:#fff
+    style I fill:#FF9800,color:#fff
+    style D fill:#FF9800,color:#fff
+    style X fill:#FF9800,color:#fff
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.6 — DFD Level 0 (Context Diagram)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart LR
+    Client((Client))
+    Psych((Psychiatrist))
+    Admin((Admin))
+    Firebase[(Firebase Auth)]
+    Supabase[(Supabase DB)]
+    STUN[(Google STUN)]
+    Gemini[(Gemini API)]
+
+    subgraph CENTER ["0.0 SAHAY PLATFORM"]
+        Core["Core Application<br>Logic"]
+    end
+
+    Client -->|"Auth credentials,<br>Session requests"| Core
+    Core -->|"Session data,<br>UI responses"| Client
+
+    Psych -->|"Credentials,<br>Profile data"| Core
+    Core -->|"Session requests,<br>Notifications"| Psych
+
+    Admin -->|"Review actions"| Core
+    Core -->|"Dashboard stats,<br>Application data"| Admin
+
+    Core -->|"Auth request"| Firebase
+    Firebase -->|"UID, Token"| Core
+
+    Core -->|"CRUD queries"| Supabase
+    Supabase -->|"Data, Realtime<br>broadcasts"| Core
+
+    Core -->|"STUN binding<br>request"| STUN
+    STUN -->|"Public IP:port"| Core
+
+    Core -->|"API key + prompt"| Gemini
+    Gemini -->|"AI response"| Core
+
+    style CENTER fill:#EEF0FF,stroke:#6C63FF,stroke-width:2px
+    style Core fill:#6C63FF,color:#fff
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.7 — DFD Level 1 (System Processes)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart TD
+    Client((Client))
+    Psych((Psychiatrist))
+    Admin((Admin))
+
+    P1["1.0<br>User Authentication"]
+    P2["2.0<br>Psychiatrist Verification"]
+    P3["3.0<br>Session Management"]
+    P4["4.0<br>WebRTC Video Engine"]
+    P5["5.0<br>AI Chat Service"]
+    P6["6.0<br>Admin Operations"]
+
+    D1[(D1: Firebase Auth)]
+    D2[(D2: Supabase DB)]
+    D3[(D3: Supabase Storage)]
+    D4[(D4: Supabase Realtime)]
+    D5[(D5: Google STUN)]
+    D6[(D6: Gemini API)]
+
+    Client -->|credentials| P1
+    Psych -->|credentials| P1
+    P1 <-->|"auth req / token"| D1
+    P1 -->|user record| D2
+
+    Psych -->|"profile, license"| P2
+    P2 -->|license image| D3
+    P2 -->|profile data| D2
+
+    Client -->|session request| P3
+    Psych -->|accept/decline| P3
+    P3 <-->|session CRUD| D2
+    P3 -->|status broadcast| D4
+
+    P3 -->|session active| P4
+    P4 <-->|signaling| D4
+    P4 <-->|"STUN req/res"| D5
+
+    Client -->|chat message| P5
+    P5 <-->|"prompt / response"| D6
+
+    Admin -->|review actions| P6
+    P6 <-->|queries| D2
+
+    style P1 fill:#6C63FF,color:#fff
+    style P2 fill:#6C63FF,color:#fff
+    style P3 fill:#6C63FF,color:#fff
+    style P4 fill:#6C63FF,color:#fff
+    style P5 fill:#6C63FF,color:#fff
+    style P6 fill:#6C63FF,color:#fff
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.8 — Class Diagram (Architecture)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+classDiagram
+    direction TB
+
+    class FirebaseConfig {
+        -firebaseConfig: Object
+        -app: FirebaseApp
+        +auth: Auth
+    }
+
+    class SupabaseConfig {
+        -supabaseUrl: string
+        -supabaseAnonKey: string
+        +supabase: SupabaseClient
+    }
+
+    class AuthContext {
+        -user: User | null
+        -loading: boolean
+        -pendingRoleRef: Ref~UserRole~
+        +signInAnon() Promise~void~
+        +signInEmail(email, password) Promise~void~
+        +registerEmail(email, password, role) Promise~void~
+        +signInWithGoogle() Promise~void~
+        +logout() Promise~void~
+        +useAuth() AuthContextType
+    }
+
+    class useWebRTC {
+        -localStream: MediaStream
+        -remoteStream: MediaStream
+        -pc: RTCPeerConnection
+        -connected: boolean
+        -isMuted: boolean
+        -isCameraOff: boolean
+        +toggleMute() void
+        +toggleCamera() void
+        +switchCamera() void
+        +cleanup() void
+    }
+
+    class useChatAI {
+        -messages: Message[]
+        -loading: boolean
+        +sendMessage(text) void
+        +clearChat() void
+    }
+
+    class RootNavigator {
+        +render() JSX
+    }
+
+    class ClientNavigator {
+        +HomeTabs: BottomTab
+        +StackScreens: Stack
+    }
+
+    class PsychNavigator {
+        +HomeTabs: BottomTab
+        +StackScreens: Stack
+    }
+
+    class AdminNavigator {
+        +HomeTabs: BottomTab
+        +StackScreens: Stack
+    }
+
+    class User {
+        +id: string
+        +email: string
+        +displayName: string
+        +role: UserRole
+        +isAnonymous: boolean
+        +alias: string
+    }
+
+    class Psychiatrist {
+        +id: string
+        +userId: string
+        +fullName: string
+        +licenseNumber: string
+        +specialization: string
+        +experience: number
+        +isApproved: boolean
+        +isOnline: boolean
+        +rating: number
+    }
+
+    class Session {
+        +id: string
+        +clientId: string
+        +psychiatristId: string
+        +status: string
+        +type: string
+        +rating: number
+    }
+
+    class AnonymousNameGenerator {
+        -adjectives: string[]
+        -animals: string[]
+        +generateAlias() string
+    }
+
+    AuthContext --> FirebaseConfig : uses
+    AuthContext --> SupabaseConfig : uses
+    AuthContext --> AnonymousNameGenerator : uses
+    RootNavigator --> AuthContext : reads user state
+    RootNavigator --> ClientNavigator : role=client
+    RootNavigator --> PsychNavigator : role=psychiatrist
+    RootNavigator --> AdminNavigator : role=admin
+    ClientNavigator --> useWebRTC : VideoCallScreen
+    PsychNavigator --> useWebRTC : VideoCallScreen
+    ClientNavigator --> useChatAI : ChatScreen
+    useWebRTC --> SupabaseConfig : signaling
+    AuthContext ..> User : manages
+    AuthContext ..> Psychiatrist : creates
+    useWebRTC ..> Session : reads sessionId
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.9 — Sequence Diagram (Video Consultation)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+sequenceDiagram
+    actor C as Client App
+    participant SDB as Supabase DB
+    participant SRT as Supabase Realtime
+    actor P as Psychiatrist App
+    participant STUN as Google STUN
+
+    Note over C,P: Session Request Phase
+    C->>SDB: INSERT session (status=pending)
+    SDB-->>C: session_id
+
+    loop Poll every 3 seconds
+        C->>SDB: SELECT status WHERE id=session_id
+        SDB-->>C: status=pending
+    end
+
+    P->>SDB: SELECT pending sessions
+    SDB-->>P: pending session list
+    P->>SDB: UPDATE session status=active
+    SDB-->>P: OK
+
+    C->>SDB: SELECT status (poll)
+    SDB-->>C: status=active ✓
+
+    Note over C,P: WebRTC Initialization Phase
+    C->>C: getUserMedia() — camera + mic
+    P->>P: getUserMedia() — camera + mic
+
+    C->>SRT: subscribe(video-call-{sessionId})
+    SRT-->>C: SUBSCRIBED
+    P->>SRT: subscribe(video-call-{sessionId})
+    SRT-->>P: SUBSCRIBED
+
+    Note over C,P: NAT Traversal
+    C->>STUN: STUN binding request
+    STUN-->>C: public IP:port
+    P->>STUN: STUN binding request
+    STUN-->>P: public IP:port
+
+    Note over C,P: Signaling Phase
+    C->>C: createOffer() + setLocalDescription()
+    C->>SRT: broadcast {type: offer, sdp}
+    SRT->>P: relay offer
+    P->>P: setRemoteDescription(offer)
+    P->>P: createAnswer() + setLocalDescription()
+    P->>SRT: broadcast {type: answer, sdp}
+    SRT->>C: relay answer
+    C->>C: setRemoteDescription(answer)
+
+    Note over C,P: ICE Candidate Exchange
+    C->>SRT: broadcast ICE candidates
+    SRT->>P: relay ICE candidates
+    P->>SRT: broadcast ICE candidates
+    SRT->>C: relay ICE candidates
+
+    Note over C,P: Video Call Active (P2P — SRTP encrypted)
+    C<-->P: Audio/Video Stream (direct peer-to-peer)
+
+    Note over C,P: Call Termination
+    C->>SRT: broadcast {type: hang-up}
+    SRT->>P: relay hang-up
+    C->>C: cleanup() — close PeerConnection
+    P->>P: cleanup() — close PeerConnection
+
+    C->>SDB: UPDATE session status=completed
+    C->>C: Show Rating Modal (1-5 stars)
+    C->>SDB: UPDATE session rating=N
+    C->>SDB: UPDATE psychiatrist avg rating
+
+    Note over C,P: Both navigate to Home Screen
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.10 — State Diagram (Session Lifecycle)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+stateDiagram-v2
+    [*] --> Idle
+
+    Idle --> Pending : Client requests session
+    Pending --> Active : Psychiatrist accepts
+    Pending --> Cancelled : Psychiatrist declines /<br>Client cancels / Timeout
+
+    Active --> Connected : WebRTC P2P connection<br>established
+
+    Connected --> Completed : Either party<br>ends call
+
+    Completed --> Rated : Client submits<br>rating (1-5 stars)
+    Completed --> Idle : Client skips rating
+
+    Rated --> Idle : Return to home screen
+
+    Cancelled --> Idle : Return to home screen
+
+    state Idle {
+        [*] --> Browsing
+        Browsing --> SelectingDoctor
+        SelectingDoctor --> PaymentProcessing
+        PaymentProcessing --> [*]
+    }
+
+    state Active {
+        [*] --> InitializingWebRTC
+        InitializingWebRTC --> ExchangingSignals
+        ExchangingSignals --> NegotiatingICE
+        NegotiatingICE --> [*]
+    }
+
+    state Connected {
+        [*] --> VideoCallActive
+        VideoCallActive --> MutedAudio : Toggle Mute
+        MutedAudio --> VideoCallActive : Toggle Unmute
+        VideoCallActive --> CameraOff : Toggle Camera
+        CameraOff --> VideoCallActive : Toggle Camera On
+    }
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 3.11 — Menu Tree (Navigation Architecture)</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+flowchart TD
+    ROOT["Sahay App<br>(RootNavigator)"]
+
+    ROOT --> AUTH["Auth Flow<br>(AuthNavigator)"]
+    ROOT --> CLIENT["Client Flow<br>(ClientNavigator)"]
+    ROOT --> PSYCH["Psychiatrist Flow<br>(PsychNavigator)"]
+    ROOT --> ADMIN["Admin Flow<br>(AdminNavigator)"]
+
+    AUTH --> W["Welcome Screen"]
+    AUTH --> LI["Login Screen"]
+    AUTH --> REG["Register Screen<br>(role param)"]
+
+    CLIENT --> CT["📱 Bottom Tabs"]
+    CT --> CH["🏠 Home Tab<br>ClientHomeScreen"]
+    CT --> CF["🔍 Find Tab<br>FindPsychScreen"]
+
+    CLIENT --> CS["📚 Stack Screens"]
+    CS --> SR["Session Request"]
+    CS --> PAY["Payment Screen"]
+    CS --> SW["Session Waiting"]
+    CS --> VC1["Video Call Screen"]
+    CS --> AI["AI Chat Screen"]
+    CS --> SC["Self Care Screen"]
+
+    PSYCH --> PO["Onboarding Screen<br>(3-step, skip if exists)"]
+    PSYCH --> PT["📱 Bottom Tabs"]
+    PT --> PH["🏠 Home Tab<br>PsychHomeScreen"]
+    PT --> PQ["📋 Queue Tab<br>SessionQueueScreen"]
+
+    PSYCH --> PS["📚 Stack Screens"]
+    PS --> VC2["Video Call Screen"]
+    PS --> EP["Edit Profile Screen"]
+
+    ADMIN --> AT["📱 Bottom Tabs"]
+    AT --> AD["📊 Dashboard Tab<br>AdminDashboard"]
+    AT --> AP["📋 Applications Tab<br>PsychApplications"]
+
+    ADMIN --> AS["📚 Stack Screens"]
+    AS --> DET["Application Detail"]
+
+    style ROOT fill:#6C63FF,color:#fff
+    style AUTH fill:#FF9800,color:#fff
+    style CLIENT fill:#4CAF50,color:#fff
+    style PSYCH fill:#2196F3,color:#fff
+    style ADMIN fill:#f44336,color:#fff
+</pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2>Fig 4.1 — Physical Database Schema</h2>
+<!-- ============================================================ -->
+<div class="diagram-box">
+<pre class="mermaid">
+erDiagram
+    users {
+        UUID id PK "Primary Key"
+        VARCHAR firebase_uid UK "Unique - Firebase link"
+        VARCHAR email "Nullable"
+        VARCHAR display_name "Nullable"
+        VARCHAR role "client / psychiatrist / admin"
+        BOOLEAN is_anonymous "Default: false"
+        VARCHAR alias "e.g. CalmOwl#7392"
+        TIMESTAMPTZ created_at "Default: now()"
+    }
+
+    psychiatrists {
+        UUID id PK "Primary Key"
+        UUID user_id FK "FK to users.id"
+        VARCHAR full_name "Required"
+        VARCHAR license_number "Required, min 5 chars"
+        TEXT license_image_url "Supabase Storage URL"
+        VARCHAR specialization "Required"
+        INTEGER experience "Years, 0-50"
+        TEXT bio "Min 20 characters"
+        INTEGER price "INR 99-499"
+        BOOLEAN is_approved "Default: false"
+        BOOLEAN is_online "Default: false"
+        DECIMAL rating "Default: 5.0"
+        INTEGER total_sessions "Default: 0"
+        TIMESTAMPTZ created_at "Default: now()"
+    }
+
+    sessions {
+        UUID id PK "Primary Key"
+        UUID client_id FK "FK to users.id"
+        UUID psychiatrist_id FK "FK to psychiatrists.id"
+        VARCHAR status "pending/active/completed/cancelled"
+        VARCHAR type "chat / video"
+        INTEGER rating "1-5, Nullable"
+        TIMESTAMPTZ started_at "Nullable"
+        TIMESTAMPTZ ended_at "Nullable"
+        TIMESTAMPTZ created_at "Default: now()"
+    }
+
+    messages {
+        UUID id PK "Primary Key"
+        UUID session_id FK "FK to sessions.id"
+        UUID sender_id FK "FK to users.id"
+        TEXT text "Message content"
+        TIMESTAMPTZ created_at "Default: now()"
+    }
+
+    notifications {
+        UUID id PK "Primary Key"
+        UUID user_id FK "FK to users.id"
+        VARCHAR title "Notification title"
+        TEXT body "Notification body"
+        JSONB data "Routing metadata"
+        BOOLEAN read "Default: false"
+        TIMESTAMPTZ created_at "Default: now()"
+    }
+
+    users ||--o| psychiatrists : "has profile"
+    users ||--o{ sessions : "requests (client_id)"
+    psychiatrists ||--o{ sessions : "conducts (psychiatrist_id)"
+    sessions ||--o{ messages : "contains"
+    users ||--o{ messages : "sends (sender_id)"
+    users ||--o{ notifications : "receives"
+</pre>
+</div>
+
+<hr>
+<p style="text-align:center; color:#999; font-size:13px; margin-top:60px;">
+  Sahay Project Diagrams — Open in Chrome/Firefox, screenshot each diagram for your whitebook.<br>
+  All 11 diagrams rendered using Mermaid.js
+</p>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+    sequence: { useMaxWidth: true, actorMargin: 80, messageMargin: 40 },
+    er: { useMaxWidth: true },
+    gantt: { useMaxWidth: true }
+  });
+</script>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ import { AuthStackParamList } from '@/navigation/AuthNavigator';
 import { useAuth } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 import styles from '@/styles/screens/auth/WelcomeScreen.styles';
+import CrisisHelplineBanner from '@/components/common/CrisisHelplineBanner';
 
 const { width } = Dimensions.get('window');
 type Nav = StackNavigationProp<AuthStackParamList, 'Welcome'>;
@@ -68,6 +69,8 @@ export default function WelcomeScreen() {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <CrisisHelplineBanner compact />
     </SafeAreaView>
   );
 }

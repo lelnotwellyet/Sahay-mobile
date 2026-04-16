@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, TouchableOpacity,
-  FlatList, TextInput, ActivityIndicator
+  FlatList, TextInput,
 } from 'react-native';
+import { SkeletonList } from '@/components/common/SkeletonCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -67,6 +68,8 @@ export default function FindPsychScreen() {
             <Text style={styles.metaText}>{item.experience ?? 0} years exp.</Text>
             <Ionicons name="star" size={12} color="#FFC107" style={{ marginLeft: 8 }} />
             <Text style={styles.metaText}>{item.rating ?? '5.0'}</Text>
+            <Ionicons name="pricetag-outline" size={12} color="#6C63FF" style={{ marginLeft: 8 }} />
+            <Text style={[styles.metaText, { color: '#6C63FF', fontWeight: '700' }]}>₹{item.price ?? 199}</Text>
           </View>
         </View>
         <View style={[styles.statusBadge, { backgroundColor: item.is_online ? '#E8F5E9' : '#F5F5F5' }]}>
@@ -135,10 +138,7 @@ export default function FindPsychScreen() {
       </View>
 
       {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#6C63FF" />
-          <Text style={styles.loadingText}>Finding professionals...</Text>
-        </View>
+        <SkeletonList count={3} type="psych" />
       ) : filtered.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Ionicons name="person-outline" size={60} color="#ccc" />

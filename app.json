@@ -48,6 +48,13 @@
           "color": "#6C63FF",
           "defaultChannel": "default"
         }
+      ],
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "Sahay needs camera access for video calls",
+          "microphonePermission": "Sahay needs microphone access for video calls"
+        }
       ]
     ]
   }

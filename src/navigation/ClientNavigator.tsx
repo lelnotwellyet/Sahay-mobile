@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import ClientHomeScreen from '@/screens/client/ClientHomeScreen';
 import FindPsychScreen from '@/screens/client/FindPsychScreen';
 import SessionRequestScreen from '@/screens/client/SessionRequestScreen';
+import PaymentScreen from '@/screens/client/PaymentScreen';
+import SessionWaitingScreen from '@/screens/client/SessionWaitingScreen';
 import ChatScreen from '@/screens/client/ChatScreen';
 import VideoCallScreen from '@/screens/client/VideoCallScreen';
 import MySessionsScreen from '@/screens/client/MySessionsScreen';
@@ -42,6 +44,8 @@ export default function ClientNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ClientTabs" component={ClientTabs} />
       <Stack.Screen name="SessionRequest" component={SessionRequestScreen} />
+      <Stack.Screen name="Payment" component={PaymentScreen} />
+      <Stack.Screen name="SessionWaiting" component={SessionWaitingScreen} />
       <Stack.Screen name="VideoCall" component={VideoCallScreen} />
       <Stack.Screen name="MySessions" component={MySessionsScreen} />
       <Stack.Screen name="SelfCare" component={SelfCareScreen} />
