@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -16,33 +16,69 @@ export default function SessionWaitingScreen() {
   const route = useRoute<RouteProp<RouteParams, 'SessionWaiting'>>();
   const { sessionId, psychiatrist } = route.params;
   const [cancelled, setCancelled] = useState(false);
+  const navigatedRef = useRef(false);
+
+  // Centralized handler so both Realtime and polling use the same logic
+  const handleStatusChange = useCallback((status: string) => {
+    if (navigatedRef.current) return; // Prevent double-navigation
+    if (status === 'active') {
+      navigatedRef.current = true;
+      navigation.replace('VideoCall', {
+        sessionId,
+        psychName: `Dr. ${psychiatrist.full_name}`,
+        psychiatristId: psychiatrist.id,
+      });
+    } else if (status === 'cancelled') {
+      navigatedRef.current = true;
+      setCancelled(true);
+      Alert.alert(
+        'Request Declined',
+        'The psychiatrist is unable to take your session right now.',
+        [{ text: 'OK', onPress: () => navigation.replace('ClientTabs') }]
+      );
+    }
+  }, [sessionId, psychiatrist, navigation]);
 
   useEffect(() => {
+    // 1) Immediate check — session may already be accepted
+    const checkNow = async () => {
+      const { data } = await supabase
+        .from('sessions')
+        .select('status')
+        .eq('id', sessionId)
+        .single();
+      if (data) handleStatusChange(data.status);
+    };
+    checkNow();
+
+    // 2) Realtime subscription (primary mechanism)
     const channel = supabase
       .channel(`session-status-${sessionId}`)
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'sessions', filter: `id=eq.${sessionId}` },
         (payload) => {
-          const status = (payload.new as any).status;
-          if (status === 'active') {
-            channel.unsubscribe();
-            navigation.replace('VideoCall', { sessionId, psychName: `Dr. ${psychiatrist.full_name}` });
-          } else if (status === 'cancelled') {
-            channel.unsubscribe();
-            setCancelled(true);
-            Alert.alert(
-              'Request Declined',
-              'The psychiatrist is unable to take your session right now.',
-              [{ text: 'OK', onPress: () => navigation.replace('ClientTabs') }]
-            );
-          }
+          handleStatusChange((payload.new as any).status);
         }
       )
       .subscribe();
 
-    return () => { channel.unsubscribe(); };
-  }, []);
+    // 3) Polling fallback every 5 seconds — catches missed Realtime events
+    const pollInterval = setInterval(async () => {
+      if (navigatedRef.current) return;
+      const { data } = await supabase
+        .from('sessions')
+        .select('status')
+        .eq('id', sessionId)
+        .single();
+      if (data) handleStatusChange(data.status);
+    }, 5000);
+
+    return () => {
+      channel.unsubscribe();
+      clearInterval(pollInterval);
+    };
+  }, [sessionId, handleStatusChange]);
 
   const cancelRequest = () => {
     Alert.alert('Cancel Request', 'Are you sure? Your payment will be refunded.', [

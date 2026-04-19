@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
 import { IMessage } from 'react-native-gifted-chat';
 
-const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? '';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+const OPENROUTER_API_KEY = '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';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = 'openai/gpt-oss-120b';
 
 const SYSTEM_PROMPT = `You are Sahay, a compassionate AI mental health support assistant.
 You provide emotional support, coping strategies, and a safe space to talk.
@@ -19,36 +20,40 @@ export const WELCOME_MSG: IMessage = {
   user: AI_USER,
 };
 
-async function callGemini(history: IMessage[]): Promise<string> {
-  // Gemini needs oldest-first and must start with a 'user' turn
+async function callAI(history: IMessage[]): Promise<string> {
   const chronological = [...history]
     .reverse()
     .filter(m => m._id !== 'welcome');
 
-  const firstUserIdx = chronological.findIndex(m => m.user._id !== 'sahay-ai');
-  if (firstUserIdx === -1) return "I'm here for you. Could you tell me more?";
+  const messages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...chronological.map(msg => ({
+      role: msg.user._id === 'sahay-ai' ? 'assistant' : 'user',
+      content: msg.text as string,
+    }))
+  ];
 
-  const contents = chronological.slice(firstUserIdx).map(msg => ({
-    role: msg.user._id === 'sahay-ai' ? 'model' : 'user',
-    parts: [{ text: msg.text as string }],
-  }));
-
-  const res = await fetch(GEMINI_URL, {
+  const res = await fetch(OPENROUTER_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+      'HTTP-Referer': 'https://sahay.app', 
+      'X-Title': 'Sahay',
+    },
     body: JSON.stringify({
-      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents,
+      model: MODEL,
+      messages,
     }),
   });
 
   if (!res.ok) {
     const errBody = await res.text();
-    throw new Error(`Gemini ${res.status}: ${errBody}`);
+    throw new Error(`OpenRouter Error ${res.status}: ${errBody}`);
   }
 
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "I'm here for you. Could you tell me more?";
+  return data.choices?.[0]?.message?.content ?? "I'm here for you. Could you tell me more?";
 }
 
 export function useChatAI(userId: string) {
@@ -70,7 +75,7 @@ export function useChatAI(userId: string) {
 
     try {
       const historyWithNew = [userMsg, ...messages];
-      const reply = await callGemini(historyWithNew);
+      const reply = await callAI(historyWithNew);
 
       setMessages(prev => [{
         _id: `ai-${Date.now()}`,

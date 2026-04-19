@@ -137,6 +137,10 @@ export function useWebRTC(sessionId: string, userId: string) {
 
     const init = async () => {
       try {
+        // Reset cleanup flag so this init works on remount/rejoin
+        cleanedUp.current = false;
+        pendingCandidates.current = [];
+
         // Get local media stream
         const stream = await mediaDevices.getUserMedia({
           audio: true,
